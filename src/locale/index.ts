@@ -5,7 +5,9 @@ import zh from "./zh.json";
 export const defaultLang = "en-US";
 
 export const i18n = createI18n({
-  locale: localStorage.getItem("lang") ?? defaultLang,
+  locale:
+    (document.documentElement.lang || localStorage.getItem("lang")) ??
+    defaultLang,
   messages: {
     "en-US": en,
     "zh-CN": zh,
