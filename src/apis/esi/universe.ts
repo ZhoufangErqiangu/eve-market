@@ -29,8 +29,18 @@ export async function getUniverseTypeById(id: number, language?: string) {
   });
 }
 
+export interface UniverseName {
+  category: string;
+  id: number;
+  name: string;
+}
+/**
+ * Resolve a set of IDs to names and categories. Supported ID’s for resolving are: Characters, Corporations, Alliances, Stations, Solar Systems, Constellations, Regions, Types, Factions
+ *
+ * https://ali-esi.evepc.163.com/ui/#/Universe/post_universe_names
+ */
 export async function postUniverseNames(ids: number[]) {
-  return await service.request<Array<{ id: number; name: string }>>({
+  return await service.request<UniverseName[]>({
     url: "/universe/names",
     method: "post",
     data: ids,
