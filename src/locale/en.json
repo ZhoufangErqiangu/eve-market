@@ -112,5 +112,6 @@
   "Group": "Group",
   "Volume": "Volume",
   "Price": "Price",
-  "Duration": "Duration"
+  "Duration": "Duration",
+  "Cache is empty, you need to init.":"Cache is empty, you need to init."
 }
