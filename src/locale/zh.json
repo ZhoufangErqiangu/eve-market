@@ -112,5 +112,6 @@
   "Group": "组",
   "Volume": "数量",
   "Price": "价格",
-  "Duration": "持续时间"
+  "Duration": "持续时间",
+  "Cache is empty, you need to init.": "缓存为空, 你需要初始化"
 }
