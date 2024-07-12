@@ -33,11 +33,13 @@ async function init(id: number) {
   }
   const mg = find(mgs, id);
   if (!mg?.types) return;
+  const ts: UniverseType[] = [];
   for (const tid of mg.types) {
     const t = await getType(tid);
     if (!t) continue;
-    types.value.push(t);
+    ts.push(t);
   }
+  types.value = ts;
 }
 watch(() => props.groupId, (val, oldVal) => {
   if (val === oldVal) return;
