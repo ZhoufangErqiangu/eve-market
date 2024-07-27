@@ -113,5 +113,19 @@
   "Volume": "Volume",
   "Price": "Price",
   "Duration": "Duration",
-  "Cache is empty, you need to init.":"Cache is empty, you need to init."
+  "Cache is empty, you need to init.": "Cache is empty, you need to init.",
+  "Missile": "Missile",
+  "Missile calculator": "Missile calculator",
+  "Missile damage": "Missile damage",
+  "Fire interval": "Fire interval (s)",
+  "Explosion radius": "Explosion radius (m)",
+  "Explosion velocity": "Explosion velocity (m/s)",
+  "Target signal radius": "Target signal radius (m)",
+  "Target velocity": "Target velocity (m/s)",
+  "Label": "Label",
+  "Value": "Value",
+  "DPS on board": "DPS on board",
+  "Magnification": "Magnification",
+  "Damage per hit": "Damage per hit",
+  "Damage per second": "Damage per second"
 }

@@ -113,5 +113,19 @@
   "Volume": "数量",
   "Price": "价格",
   "Duration": "持续时间",
-  "Cache is empty, you need to init.": "缓存为空, 你需要初始化"
+  "Cache is empty, you need to init.": "缓存为空, 你需要初始化",
+  "Missile": "导弹",
+  "Missile calculator": "导弹计算器",
+  "Missile damage": "伤害",
+  "Fire interval": "发射间隔 (s)",
+  "Explosion radius": "爆炸半径 (m)",
+  "Explosion velocity": "爆炸速度 (m/s)",
+  "Target signal radius": "目标信号半径 (m)",
+  "Target velocity": "目标速度 (m/s)",
+  "Label": "标签",
+  "Value": "值",
+  "DPS on board": "面板DPS",
+  "Magnification": "倍率",
+  "Damage per hit": "DPH",
+  "Damage per second": "DPS"
 }

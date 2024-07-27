@@ -23,6 +23,14 @@ export const mainRoute: RouteRaw[] = [
     },
   },
   {
+    name: "missile",
+    path: "/missile",
+    component: async () => await import("../views/missile/MissileView.vue"),
+    meta: {
+      title: "Missile",
+    },
+  },
+  {
     name: "config",
     path: "/config",
     component: async () => await import("../views/config/ConfigView.vue"),
