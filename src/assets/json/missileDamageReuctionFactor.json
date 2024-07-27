@@ -1,0 +1,32 @@
+[
+  { "missile": "Javelin Rocket", "drf": 0.682 },
+  { "missile": "Rocket", "drf": 0.644 },
+  { "missile": "Rage Rocket", "drf": 0.882 },
+  { "missile": "Precision Light Missile", "drf": 0.561 },
+  { "missile": "Light Missile", "drf": 0.604 },
+  { "missile": "Fury Light Missile", "drf": 0.682 },
+  { "missile": "Auto-Targeting Light Missile", "drf": 0.604 },
+
+  { "missile": "Javelin Heavy Assault Missile", "drf": 0.895 },
+  { "missile": "Heavy Assault Missile", "drf": 0.882 },
+  { "missile": "Rage Heavy Assault Missile", "drf": 0.92 },
+  { "missile": "Precision Heavy Missile", "drf": 0.583 },
+  { "missile": "Heavy Missile", "drf": 0.682 },
+  { "missile": "Fury Heavy Missile", "drf": 0.882 },
+  { "missile": "Auto-Targeting Heavy Missile", "drf": 0.682 },
+
+  { "missile": "Javelin Torpedo", "drf": 0.967 },
+  { "missile": "Torpedo", "drf": 0.944 },
+  { "missile": "Rage Torpedo", "drf": 0.967 },
+  { "missile": "Precision Cruise Missile", "drf": 0.735 },
+  { "missile": "Cruise Missile", "drf": 0.882 },
+  { "missile": "Fury Cruise Missile", "drf": 0.908 },
+  { "missile": "Auto-Targeting Cruise Missile", "drf": 0.882 },
+
+  { "missile": "Javelin XL Torpedo", "drf": 0.967 },
+  { "missile": "XL Torpedo", "drf": 1 },
+  { "missile": "Rage XL Torpedo", "drf": 1 },
+  { "missile": "Precision XL Cruise Missile", "drf": 0.882 },
+  { "missile": "XL Cruise Missile", "drf": 0.882 },
+  { "missile": "Fury XL Cruise Missile", "drf": 0.882 }
+]

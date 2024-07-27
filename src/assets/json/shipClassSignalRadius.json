@@ -1,0 +1,19 @@
+[
+  { "ship": "Capsule", "signalRadius": 25 },
+  { "ship": "Shuttle", "signalRadius": 25 },
+
+  { "ship": "Frigate", "signalRadius": 38 },
+  { "ship": "Destroyer", "signalRadius": 65 },
+  { "ship": "Cruiser", "signalRadius": 120 },
+  { "ship": "Industrial", "signalRadius": 195 },
+  { "ship": "Mining Barge", "signalRadius": 200 },
+  { "ship": "Battlecruiser", "signalRadius": 270 },
+  { "ship": "Battleship", "signalRadius": 400 },
+
+  { "ship": "Jump Freighter", "signalRadius": 9840 },
+  { "ship": "Carrier", "signalRadius": 9960 },
+  { "ship": "Freighter", "signalRadius": 10515 },
+  { "ship": "Dreadnought", "signalRadius": 11200 },
+  { "ship": "Supercarrier", "signalRadius": 18940 },
+  { "ship": "Titan", "signalRadius": 23397 }
+]
