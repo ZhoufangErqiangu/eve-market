@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vue-tsc && vite build",
     "preview": "vite preview",
-    "push": "yarn version --patch && git push"
+    "push": "yarn version --patch && git push",
+    "build:esi": "openapi-generator-cli generate -i ./src/apis/esi/swagger.json -g typescript-fetch -o ./src/apis/esi"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
