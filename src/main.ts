@@ -1,5 +1,4 @@
-import { ElIcon, ElLoading, ElMessage, ElNotification } from "element-plus";
-import "element-plus/es/components/icon/style/css";
+import { ElLoading, ElMessage, ElNotification } from "element-plus";
 import "element-plus/es/components/loading/style/css";
 import "element-plus/es/components/message/style/css";
 import "element-plus/es/components/notification/style/css";
@@ -16,7 +15,6 @@ createApp(App)
   .use(createPinia())
   .use(router)
   .use(i18n)
-  .use(ElIcon)
   .use(ElLoading)
   .use(ElMessage)
   .use(ElNotification)

@@ -19,6 +19,7 @@
   "Load": "加载",
   "Save": "保存",
   "Clear": "清空",
+  "Region": "星域",
   "P1": "P1",
   "P2": "P2",
   "Please select R0": "请选择R0",
@@ -171,5 +172,10 @@
   "Rage XL Torpedo": "狂乱超大型鱼雷",
   "Precision XL Cruise Missile": "精确超大型巡航导弹",
   "XL Cruise Missile": "超大型巡航导弹",
-  "Fury XL Cruise Missile": "愤怒超大型巡航导弹"
+  "Fury XL Cruise Missile": "愤怒超大型巡航导弹",
+
+  "config.esi.datasource": "数据源",
+  "config.esi.datasource.serenity": "宁静",
+  "config.esi.datasource.infinity": "Infinity",
+  "config.esi.datasource.tranquility": "Tranquility"
 }

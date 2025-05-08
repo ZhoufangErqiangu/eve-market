@@ -4,7 +4,7 @@ import {
   type RouteLocationNormalized,
   type RouteRecordRaw,
 } from "vue-router";
-import MainLayout from "../layouts/MainLayout.vue";
+import MainLayout from "../layouts/main/MainLayout.vue";
 import NotFountView from "../views/system/NotFound.vue";
 import { mainRoute } from "./main";
 import { useLayoutStore } from "../stores/layout";

@@ -12,7 +12,7 @@
             {{ $t(item.label) }}
           </el-menu-item>
         </el-menu>
-        <LanguageSelect v-model="lang" @change="onLangChange" />
+        <LanguageSelect v-model="lang" />
         <el-switch v-model="layoutStore.isDark" :active-action-icon="MoonNight" :inactive-action-icon="Sunny" />
       </el-space>
     </el-col>
@@ -29,11 +29,12 @@ import "element-plus/es/components/menu/style/css";
 import "element-plus/es/components/row/style/css";
 import "element-plus/es/components/space/style/css";
 import "element-plus/es/components/switch/style/css";
-import { ref } from "vue";
-import LanguageSelect from "../components/LanguageSelect.vue";
-import { defaultLang, setLang } from "../locale";
-import { useLayoutStore } from "../stores/layout";
+import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
+import { LANG_KEY } from "../../locale";
+import { useLayoutStore } from "../../stores/layout";
+import LanguageSelect from "../../components/LanguageSelect.vue";
 
 const layoutStore = useLayoutStore();
 const route = useRoute();
@@ -46,14 +47,18 @@ interface MenuItem {
 const menuItems: MenuItem[] = [
   { label: "Home", path: "/home" },
   { label: "Market", path: "/market" },
-  { label: "Missile", path: "/missile" },
+  // { label: "Missile", path: "/missile" },
   { label: "Config", path: "/config" },
 ];
 
-const lang = ref(localStorage.getItem("lang") ?? defaultLang);
-function onLangChange(val: string) {
-  setLang(val);
-}
+const i18n = useI18n();
+const lang = computed({
+  get: () => i18n.locale.value,
+  set: (val) => {
+    i18n.locale.value = val;
+    localStorage.setItem(LANG_KEY, val);
+  },
+});
 </script>
 
 <style lang="less" scoped>

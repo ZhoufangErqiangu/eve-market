@@ -24,7 +24,7 @@ import { ElTable, ElTableColumn, type Sort } from "element-plus";
 import "element-plus/es/components/table-column/style/css";
 import "element-plus/es/components/table/style/css";
 import { type PropType } from "vue";
-import { type MarketOrder } from "../../apis/esi/market";
+import { type MarketOrder } from "../../stores/data";
 
 const props = defineProps({
   header: {

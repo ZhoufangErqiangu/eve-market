@@ -2,16 +2,16 @@
   <div class="market-item-box">
     <div class="market-item-header">
       <div class="market-item-name">
-        {{ props.item.name }}
+        {{ props.data.name }}
       </div>
     </div>
     <div class="market-item-body">
       <el-row :gutter="15">
         <el-col :span="6">
-          <MarketItemPrice title="Average price" :price="avg" />
+          <MarketItemPrice title="Average price" :price="price?.avg" />
         </el-col>
         <el-col :span="6">
-          <MarketItemPrice title="Adjusted price" :price="adj" />
+          <MarketItemPrice title="Adjusted price" :price="price?.adj" />
         </el-col>
       </el-row>
     </div>
@@ -19,31 +19,29 @@
 </template>
 
 <script lang="ts" setup>
-import { ElRow, ElCol } from "element-plus";
-import "element-plus/es/components/row/style/css";
+import { ElCol, ElRow } from "element-plus";
 import "element-plus/es/components/col/style/css";
-import { ref, type PropType } from "vue";
-import { type UniverseType } from "../../apis/esi/universe";
-import { getPrice } from "../../utils/price";
+import "element-plus/es/components/row/style/css";
+import { computed, type PropType } from "vue";
+import { useDataStore } from "../../stores/data";
 import MarketItemPrice from "./MarketItemPrice.vue";
 
-const props = defineProps({
-  item: {
-    type: Object as PropType<UniverseType>,
-    required: true
-  }
-});
-const avg = ref(0);
-const adj = ref(0);
-
-function init() {
-  const pp = getPrice(props.item.type_id);
-  if (pp) {
-    avg.value = pp.average_price ?? 0;
-    adj.value = pp.adjusted_price ?? 0;
-  }
+interface MarketType {
+  id: number;
+  name: string;
 }
-init();
+
+const dataStore = useDataStore();
+
+const props = defineProps({
+  data: {
+    type: Object as PropType<MarketType>,
+    required: true,
+  },
+});
+const price = computed(() => {
+  return dataStore.marketPrices[props.data.id];
+});
 </script>
 
 <style lang="less" scoped>

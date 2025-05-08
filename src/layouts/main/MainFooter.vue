@@ -21,6 +21,10 @@ import "element-plus/es/components/space/style/css";
 <style lang="less" scoped>
 .footer-box {
   text-align: center;
+
+  p {
+    margin: 0;
+  }
 }
 
 .text1 {

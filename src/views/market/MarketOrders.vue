@@ -1,56 +1,59 @@
 <template>
   <div v-loading="headerLoading" class="market-order-header">
     <h2>
-      {{ tt?.name ?? 'Loading' }}
+      {{ name }}
     </h2>
   </div>
   <div v-loading="bodingLoading" class="market-order-body">
-    <MarketOrderTable header="Ask" :orders="sellOrders" :sort="{ prop: 'price', order: 'ascending' }" />
-    <MarketOrderTable header="Bid" :orders="buyOrders" :sort="{ prop: 'price', order: 'descending' }" />
+    <MarketOrdersTable header="Ask" :orders="sellOrders" :sort="{ prop: 'price', order: 'ascending' }" />
+    <MarketOrdersTable header="Bid" :orders="buyOrders" :sort="{ prop: 'price', order: 'descending' }" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ElMessage } from "element-plus";
 import { ref, watch } from "vue";
-import { type MarketOrder } from "../../apis/esi/market";
-import { type UniverseType } from "../../apis/esi/universe";
-import { getMarketOrder } from "../../utils/market";
-import { getType } from "../../utils/type";
-import MarketOrderTable from "./MarketOrderTable.vue";
+import { type MarketOrder, useDataStore } from "../../stores/data";
+import MarketOrdersTable from "./MarketOrdersTable.vue";
 
 const props = defineProps({
-  typeId: {
+  type: {
+    type: Number,
+    required: true,
+  },
+  region: {
     type: Number,
     required: true,
   },
 });
 
+const dataStore = useDataStore();
+
 const headerLoading = ref(false);
 const bodingLoading = ref(false);
-const tt = ref<UniverseType>();
+const name = ref("Loading");
 const buyOrders = ref<MarketOrder[]>([]);
 const sellOrders = ref<MarketOrder[]>([]);
 
-async function initHeader(id: number) {
+async function initHeader() {
   if (headerLoading.value) return;
   try {
     headerLoading.value = true;
-    const t = await getType(id);
-    tt.value = t;
+    const ns = await dataStore.readNames([props.type]);
+    name.value = ns[props.type];
   } catch (err) {
     console.error("init header error", err);
     ElMessage.error("Init error");
   }
   headerLoading.value = false;
 }
-async function initBody(id: number) {
+async function initBody() {
   if (bodingLoading.value) return;
   try {
     bodingLoading.value = true;
-    const mos = await getMarketOrder(id);
-    buyOrders.value = mos.filter((mo) => mo.is_buy_order);
-    sellOrders.value = mos.filter((mo) => !mo.is_buy_order);
+    const mos = await dataStore.readMarketOrders(props.region, props.type);
+    buyOrders.value = mos.filter((mo) => mo.isBuy);
+    sellOrders.value = mos.filter((mo) => !mo.isBuy);
   } catch (err) {
     console.error("init header error", err);
     ElMessage.error("Init error 2");
@@ -58,12 +61,20 @@ async function initBody(id: number) {
   bodingLoading.value = false;
 }
 
-watch(() => props.typeId, (val, oldVal) => {
-  if (val === oldVal) return;
-  if (!val) return;
-  void initHeader(val);
-  void initBody(val);
-}, { immediate: true });
+watch(
+  () => props.type,
+  () => {
+    initHeader();
+    initBody();
+  },
+  { immediate: true }
+);
+watch(
+  () => props.region,
+  () => {
+    initBody();
+  },
+);
 </script>
 
 <style lang="less" scoped>

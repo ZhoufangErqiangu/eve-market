@@ -19,6 +19,7 @@
   "Load": "Load",
   "Save": "Save",
   "Clear": "Clear",
+  "Region": "Region",
   "P1": "P1",
   "P2": "P2",
   "Please select R0": "Please select R0",
@@ -172,5 +173,10 @@
   "Rage XL Torpedo": "Rage XL Torpedo",
   "Precision XL Cruise Missile": "Precision XL Cruise Missile",
   "XL Cruise Missile": "XL Cruise Missile",
-  "Fury XL Cruise Missile": "Fury XL Cruise Missile"
+  "Fury XL Cruise Missile": "Fury XL Cruise Missile",
+
+  "config.esi.datasource": "Data source",
+  "config.esi.datasource.serenity": "Serenity",
+  "config.esi.datasource.infinity": "Infinity",
+  "config.esi.datasource.tranquility": "Tranquility"
 }

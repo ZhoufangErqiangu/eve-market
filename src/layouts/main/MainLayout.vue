@@ -6,7 +6,7 @@
     <el-main>
       <router-view />
     </el-main>
-    <el-footer>
+    <el-footer style="height: auto;">
       <MainFooter />
     </el-footer>
   </el-container>

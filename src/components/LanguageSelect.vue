@@ -26,9 +26,9 @@ const props = defineProps({
     default: undefined
   },
   size: {
-    type: String as PropType<"" | "default" | "small" | "large">,
-    default: ""
-  }
+    type: String as PropType<"default" | "small" | "large">,
+    default: undefined,
+  },
 });
 const emits = defineEmits(["update:modelValue", "change"]);
 
@@ -49,13 +49,13 @@ function onChange(val: string) {
 <style lang="less" scoped>
 .lang-select {
   width: 120px;
-}
 
-.title {
-  margin-bottom: 3px;
-  color: #A0A4AB;
-  font-size: 8px;
-  font-weight: 300;
-  line-height: 50%;
+  .title {
+    margin-bottom: 3px;
+    color: #A0A4AB;
+    font-size: 8px;
+    font-weight: 300;
+    line-height: 50%;
+  }
 }
 </style>

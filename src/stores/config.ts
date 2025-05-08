@@ -1,44 +1,68 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
-import DataSourceJson from "../assets/json/datasource.json";
-import RouterJson from "../assets/json/router.json";
+import { computed, ref } from "vue";
+import ESISwaggerJson from "../assets/esi/swagger.json";
+
+export interface Config {
+  esiDataSource: string;
+  marketRegion: number;
+}
 
 const CONFIG_KEY = "config";
-const DEFAULT_CONFIG = {
-  dataSource: DataSourceJson[0]?.value,
-  router: RouterJson[0]?.value,
+const DEFAULT_CONFIG: Config = {
+  esiDataSource: "tranquility",
+  marketRegion: 10000002,
 };
 
 export const useConfigStore = defineStore("config", () => {
-  // get config from localStorage
+  // read config from localStorage
   const s = localStorage.getItem(CONFIG_KEY);
-  const c: Record<string, string | undefined> = s
-    ? JSON.parse(s)
-    : DEFAULT_CONFIG;
+  const c: Config = s ? JSON.parse(s) : DEFAULT_CONFIG;
 
-  const dataSource = ref<string | undefined>(c.dataSource);
-  const router = ref<string | undefined>(c.router);
-
+  const _esiDataSource = ref<string | undefined>(c.esiDataSource);
+  const esiDataSource = computed({
+    get: () => _esiDataSource.value,
+    set: (v) => {
+      _esiDataSource.value = v;
+      save();
+    },
+  });
   /**
-   * set config
+   * do not modify the options
    */
-  function setConfig(config: { dataSource?: string; router?: string }) {
-    dataSource.value = config.dataSource;
-    router.value = config.router;
-    // save to localStorage
+  const esiDataSourceOptions = ESISwaggerJson.parameters.datasource.enum.map(
+    (ds) => {
+      return {
+        label: `config.esi.datasource.${ds}`,
+        value: ds,
+      };
+    },
+  );
+
+  const _marketRegion = ref<number>(
+    c.marketRegion ?? DEFAULT_CONFIG.marketRegion,
+  );
+  const marketRegion = computed({
+    get: () => _marketRegion.value,
+    set: (v) => {
+      _marketRegion.value = v ?? DEFAULT_CONFIG.marketRegion;
+      save();
+    },
+  });
+
+  function save() {
     localStorage.setItem(
       CONFIG_KEY,
       JSON.stringify({
-        dataSource: config.dataSource,
-        router: config.router,
+        esiDataSource: esiDataSource.value,
+        marketRegion: _marketRegion.value,
       }),
     );
   }
 
   return {
-    dataSource,
-    router,
-
-    setConfig,
+    esiDataSource,
+    esiDataSourceOptions,
+    marketRegion,
+    save,
   };
 });

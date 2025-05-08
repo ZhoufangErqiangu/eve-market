@@ -15,12 +15,12 @@ import { computed } from "vue";
 const props = defineProps({
   title: {
     type: String,
-    required: true
+    required: true,
   },
   price: {
     type: Number,
-    required: true
-  }
+    default: 0.0,
+  },
 });
 
 const priceStr = computed(() => {

@@ -19,8 +19,8 @@ const props = defineProps({
   },
   precision: {
     type: Number,
-    default: 2
-  }
+    default: 2,
+  },
 });
 const emits = defineEmits(["update:modelValue"]);
 
