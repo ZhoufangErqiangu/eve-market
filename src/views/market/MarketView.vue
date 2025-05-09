@@ -10,7 +10,7 @@
           <el-empty v-else :description="$t('market.orders.empty')" />
         </el-tab-pane>
         <el-tab-pane class="pane-group" :label="$t('market.items.label')" name="group">
-          <MarketItems :data="activeGroup?.types" />
+          <MarketItems :data="activeGroup?.types" @type="onItemsType" />
         </el-tab-pane>
       </el-tabs>
     </el-main>
@@ -43,6 +43,10 @@ function onGroup(id: number) {
 function onType(id: number, group: number) {
   activeTab.value = "order";
   activeGroup.value = dataStore.readMarketGroup(group);
+  activeType.value = id;
+}
+function onItemsType(id: number) {
+  activeTab.value = "order";
   activeType.value = id;
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div class="market-item-box">
-    <div class="market-item-header">
+    <div class="market-item-header" @click="onClick">
       <div class="market-item-name">
         {{ props.data.name }}
       </div>
@@ -39,9 +39,15 @@ const props = defineProps({
     required: true,
   },
 });
+const emits = defineEmits(["type"]);
+
 const price = computed(() => {
   return dataStore.marketPrices[props.data.id];
 });
+
+function onClick() {
+  emits("type", props.data.id);
+}
 </script>
 
 <style lang="less" scoped>
@@ -54,6 +60,8 @@ const price = computed(() => {
 .market-item-header {
   display: flex;
   align-items: center;
+
+  cursor: pointer;
 }
 
 .market-item-name {
