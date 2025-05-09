@@ -5,6 +5,7 @@ import {
   type RouteRecordRaw,
 } from "vue-router";
 import { useLayoutStore } from "../stores/layout";
+import HomeView from "../views/home/HomeView.vue";
 import NotFountView from "../views/system/NotFound.vue";
 
 export interface RouteMeta {
@@ -21,7 +22,7 @@ const routes: RouteRaw[] = [
   {
     name: "index",
     path: "/",
-    component: async () => await import("../views/home/HomeView.vue"),
+    component: HomeView,
   },
   {
     name: "market",
