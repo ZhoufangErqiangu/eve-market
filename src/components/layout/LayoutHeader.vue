@@ -22,7 +22,6 @@
 <script lang="ts" setup>
 import { MoonNight, Sunny } from "@element-plus/icons-vue";
 import { ElCol, ElMenu, ElMenuItem, ElRow, ElSpace, ElSwitch } from "element-plus";
-import "element-plus/es/components/button/style/css";
 import "element-plus/es/components/col/style/css";
 import "element-plus/es/components/menu-item/style/css";
 import "element-plus/es/components/menu/style/css";
@@ -45,9 +44,9 @@ interface MenuItem {
   path: string
 }
 const menuItems: MenuItem[] = [
-  { label: "Home", path: "/" },
-  { label: "Market", path: "/market" },
-  { label: "Config", path: "/config" },
+  { label: "layout.header.menu.home", path: "/" },
+  { label: "layout.header.menu.market", path: "/market" },
+  { label: "layout.header.menu.config", path: "/config" },
 ];
 
 const i18n = useI18n();

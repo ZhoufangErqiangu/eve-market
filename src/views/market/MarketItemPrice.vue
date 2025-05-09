@@ -1,7 +1,7 @@
 <template>
   <div class="market-item-price">
     <div class="market-item-price-title">
-      {{ $t(props.title) }}
+      {{ props.title }}
     </div>
     <div class="market-item-price-num">
       {{ priceStr }}

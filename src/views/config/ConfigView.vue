@@ -7,17 +7,17 @@
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="onSave">
-        {{ $t('Save') }}
+        {{ $t('config.save.btn') }}
       </el-button>
       <el-button @click="onReset">
-        {{ $t('Reset') }}
+        {{ $t('config.reset.btn') }}
       </el-button>
     </el-form-item>
   </el-form>
   <el-collapse>
-    <el-collapse-item :title="$t('Danger')" name="danger">
+    <el-collapse-item :title="$t('config.danger.title')" name="danger">
       <el-button type="danger" @click="onDelete">
-        Delete all data
+        {{ $t('config.delete.btn') }}
       </el-button>
     </el-collapse-item>
   </el-collapse>
@@ -33,9 +33,11 @@ import "element-plus/es/components/form/style/css";
 import "element-plus/es/components/option/style/css";
 import "element-plus/es/components/select/style/css";
 import { ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { useConfigStore } from "../../stores/config";
 import { useDataStore } from "../../stores/data";
 
+const { t } = useI18n();
 const configStore = useConfigStore();
 const dataStore = useDataStore();
 
@@ -45,15 +47,13 @@ const form = ref({
 
 function onSave() {
   configStore.esiDataSource = form.value.esiDataSource;
-  ElMessage.success("Save success");
+  ElMessage.success(t("config.save.success"));
 }
 function onReset() {
   form.value.esiDataSource = configStore.esiDataSource;
 }
 function onDelete() {
   dataStore.deleteData();
-  ElMessage.success("Delete success");
+  ElMessage.success(t("config.delete.success"));
 }
 </script>
-
-<style lang="less" scoped></style>

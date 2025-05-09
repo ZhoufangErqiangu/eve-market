@@ -3,27 +3,27 @@
     <div v-if="title" class="title">
       {{ title }}
     </div>
-    <el-select v-model="localValue" :size="size" @change="onChange">
-      <el-option v-for="l in LangList" :key="l.tag" :label="l.label" :value="l.tag" />
+    <el-select v-model="localValue" :size="size" :placeholder="$t('lang.select.placeholder')" @change="onChange">
+      <el-option v-for="l in langOptions" :key="l.tag" :label="l.label" :value="l.tag" />
     </el-select>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ElSelect, ElOption } from "element-plus";
-import "element-plus/es/components/select/style/css";
+import { ElOption, ElSelect } from "element-plus";
 import "element-plus/es/components/option/style/css";
-import LangList from "../assets/json/language.json";
+import "element-plus/es/components/select/style/css";
 import { type PropType, computed } from "vue";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps({
   modelValue: {
     type: String as PropType<string | undefined>,
-    default: undefined
+    default: undefined,
   },
   title: {
     type: String,
-    default: undefined
+    default: undefined,
   },
   size: {
     type: String as PropType<"default" | "small" | "large">,
@@ -32,10 +32,18 @@ const props = defineProps({
 });
 const emits = defineEmits(["update:modelValue", "change"]);
 
+const i18n = useI18n();
+const langOptions = computed(() => {
+  return i18n.availableLocales.map((lang) => {
+    return {
+      tag: lang,
+      label: i18n.t(`lang.${lang}`),
+    };
+  });
+});
+
 const localValue = computed({
-  get: () => {
-    return props.modelValue;
-  },
+  get: () => props.modelValue,
   set: (val) => {
     emits("update:modelValue", val);
   }

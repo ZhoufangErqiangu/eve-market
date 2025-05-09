@@ -5,11 +5,11 @@
     </el-aside>
     <el-main class="pt0 pb0 pr0">
       <el-tabs v-model="activeTab" class="h100">
-        <el-tab-pane class="pane-order" :label="$t('Order')" name="order">
+        <el-tab-pane class="pane-order" :label="$t('market.orders.label')" name="order">
           <MarketOrders v-if="activeType" :type="activeType" />
-          <el-empty v-else :description="$t('Please select a type')" />
+          <el-empty v-else :description="$t('market.orders.empty')" />
         </el-tab-pane>
-        <el-tab-pane class="pane-group" :label="$t('Group')" name="group">
+        <el-tab-pane class="pane-group" :label="$t('market.items.label')" name="group">
           <MarketItems :data="activeGroup?.types" />
         </el-tab-pane>
       </el-tabs>

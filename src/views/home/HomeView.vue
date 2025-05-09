@@ -1,11 +1,11 @@
 <template>
-  <el-card :header="$t('Init')">
+  <el-card :header="$t('home.init.header')">
     <p>
-      {{ $t('InitDesc') }}
+      {{ $t('home.init.desc') }}
     </p>
     <div>
       <el-button type="primary" :loading="initLoading" @click="onInit">
-        {{ $t('Init') }}
+        {{ $t('home.init.btn') }}
       </el-button>
     </div>
   </el-card>

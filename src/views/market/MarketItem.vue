@@ -8,10 +8,10 @@
     <div class="market-item-body">
       <el-row :gutter="15">
         <el-col :span="6">
-          <MarketItemPrice title="Average price" :price="price?.avg" />
+          <MarketItemPrice :title="$t('market.item.avg')" :price="price?.avg" />
         </el-col>
         <el-col :span="6">
-          <MarketItemPrice title="Adjusted price" :price="price?.adj" />
+          <MarketItemPrice :title="$t('market.item.adj')" :price="price?.adj" />
         </el-col>
       </el-row>
     </div>

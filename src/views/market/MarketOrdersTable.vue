@@ -2,18 +2,18 @@
   <div class="market-order-table">
     <div class="market-order-table-header">
       <h3>
-        {{ $t(props.header) }}
+        {{ props.header }}
       </h3>
     </div>
     <div class="market-order-table-body">
       <el-table :data="data" height="100%" :default-sort="props.sort">
-        <el-table-column :label="$t('Volume')" prop="remainQuantity" :sortable="true" />
-        <el-table-column :label="$t('Price')" prop="price" :sortable="true">
+        <el-table-column :label="$t('market.order.table.quanity')" prop="remainQuantity" :sortable="true" />
+        <el-table-column :label="$t('market.order.table.price')" prop="price" :sortable="true">
           <template #default="{ row }">
             {{ priceFormatter(row) }}
           </template>
         </el-table-column>
-        <el-table-column :label="$t('Duration')" prop="duration" :sortable="true" />
+        <el-table-column :label="$t('market.order.table.duration')" prop="duration" :sortable="true" />
       </el-table>
     </div>
   </div>

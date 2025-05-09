@@ -1,7 +1,7 @@
 <template>
   <div class="market-region">
     <label class="label">
-      {{ $t('Region') }}
+      {{ $t('market.region.label') }}
     </label>
     <el-select v-model="configStore.marketRegion" style="width: 120px;" placeholder="Select Region" class="w100">
       <el-option v-for="group of regionOptions" :key="group.value" :label="group.label" :value="group.value" />
