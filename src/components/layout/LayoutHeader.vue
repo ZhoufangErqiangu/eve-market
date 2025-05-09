@@ -7,7 +7,7 @@
     </el-col>
     <el-col class="box2" :span="18">
       <el-space class="h100" alignment="center">
-        <el-menu class="menu" :router="true" mode="horizontal" :default-active="defaultPath" :ellipsis="false">
+        <el-menu class="menu" :router="true" mode="horizontal" :default-active="route.path" :ellipsis="false">
           <el-menu-item v-for="item in menuItems" :key="item.path" :index="item.path" :route="item.path">
             {{ $t(item.label) }}
           </el-menu-item>
@@ -38,7 +38,6 @@ import { useLayoutStore } from "../../stores/layout";
 const layoutStore = useLayoutStore();
 const route = useRoute();
 
-const defaultPath = route.path;
 interface MenuItem {
   label: string
   path: string
