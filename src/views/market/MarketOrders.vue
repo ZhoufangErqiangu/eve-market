@@ -40,7 +40,7 @@ async function initHeader() {
   try {
     headerLoading.value = true;
     const ns = await dataStore.readNames([props.type]);
-    name.value = ns[props.type];
+    name.value = ns[props.type] ?? "Unknwon";
   } catch (err) {
     console.error("init header error", err);
     ElMessage.error("Init error");

@@ -1,15 +1,15 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
-import ESISwaggerJson from "../assets/esi/swagger.json";
+import EsiDatasourceJson from "../assets/json/esi-datasource.json";
 
 export interface Config {
-  esiDataSource: string;
+  esiDataSource?: string;
   marketRegion: number;
 }
 
 const CONFIG_KEY = "config";
 const DEFAULT_CONFIG: Config = {
-  esiDataSource: "tranquility",
+  esiDataSource: undefined,
   marketRegion: 10000002,
 };
 
@@ -29,14 +29,12 @@ export const useConfigStore = defineStore("config", () => {
   /**
    * do not modify the options
    */
-  const esiDataSourceOptions = ESISwaggerJson.parameters.datasource.enum.map(
-    (ds) => {
-      return {
-        label: `config.esi.datasource.${ds}`,
-        value: ds,
-      };
-    },
-  );
+  const esiDataSourceOptions = EsiDatasourceJson.map((ds) => {
+    return {
+      label: `config.esi.datasource.${ds}`,
+      value: ds,
+    };
+  });
 
   const _marketRegion = ref<number>(
     c.marketRegion ?? DEFAULT_CONFIG.marketRegion,

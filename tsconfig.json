@@ -55,6 +55,9 @@
     // See <https://github.com/vuejs/vue-cli/pull/5688>
     "skipLibCheck": true,
 
+    // recommended by openapi-typescript
+    "noUncheckedIndexedAccess": true,
+
     "lib": [
       // Target ES2020 to align with Vite.
       // <https://vite.dev/config/build-options.html#build-target>

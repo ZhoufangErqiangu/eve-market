@@ -54,7 +54,7 @@ export const useDataStore = defineStore("data", () => {
     const mgls = new Array<GetMarketsGroupsMarketGroupIdOk>(mgs.length);
     for (let i = 0; i < mgs.length; i++) {
       const mg = await m.getMarketsGroupsMarketGroupId({
-        marketGroupId: mgs[i],
+        marketGroupId: mgs[i]!,
       });
       mgls[i] = mg;
     }
@@ -105,7 +105,7 @@ export const useDataStore = defineStore("data", () => {
     const rs = await u.getUniverseRegions();
     const rls = new Array<Region>(rs.length);
     for (let i = 0; i < rs.length; i++) {
-      const rid = rs[i];
+      const rid = rs[i]!;
       const r = await u.getUniverseRegionsRegionId({ regionId: rid });
       rls[i] = { id: rid, name: r.name };
     }
