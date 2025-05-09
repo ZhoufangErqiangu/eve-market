@@ -6,8 +6,8 @@
       </h3>
     </div>
     <div class="market-order-table-body">
-      <el-table :data="props.orders" height="100%" :default-sort="props.sort">
-        <el-table-column :label="$t('Volume')" prop="volume_remain" :sortable="true" />
+      <el-table :data="data" height="100%" :default-sort="props.sort">
+        <el-table-column :label="$t('Volume')" prop="remainQuantity" :sortable="true" />
         <el-table-column :label="$t('Price')" prop="price" :sortable="true">
           <template #default="{ row }">
             {{ priceFormatter(row) }}
@@ -20,10 +20,11 @@
 </template>
 
 <script lang="ts" setup>
+import dayjs from "dayjs";
 import { ElTable, ElTableColumn, type Sort } from "element-plus";
 import "element-plus/es/components/table-column/style/css";
 import "element-plus/es/components/table/style/css";
-import { type PropType } from "vue";
+import { computed, type PropType } from "vue";
 import { type MarketOrder } from "../../stores/data";
 
 const props = defineProps({
@@ -38,11 +39,23 @@ const props = defineProps({
   sort: {
     type: Object as PropType<Sort>,
     default: () => ({ prop: "price", order: "descending" }),
-  }
+  },
 });
+
 function priceFormatter(row: MarketOrder) {
   return `${row.price.toLocaleString()} ISK`;
 }
+
+const now = dayjs();
+const data = computed(() => {
+  return props.orders.map((o) => {
+    const p = dayjs(o.createdAt).diff(now, "day");
+    return {
+      ...o,
+      duration: o.duration + p,
+    };
+  });
+});
 </script>
 
 <style lang="less" scoped>

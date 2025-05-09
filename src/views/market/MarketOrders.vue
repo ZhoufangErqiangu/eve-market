@@ -3,6 +3,7 @@
     <h2>
       {{ name }}
     </h2>
+    <MarketRegion />
   </div>
   <div v-loading="bodingLoading" class="market-order-body">
     <MarketOrdersTable header="Ask" :orders="sellOrders" :sort="{ prop: 'price', order: 'ascending' }" />
@@ -13,20 +14,19 @@
 <script lang="ts" setup>
 import { ElMessage } from "element-plus";
 import { ref, watch } from "vue";
+import { useConfigStore } from "../../stores/config";
 import { type MarketOrder, useDataStore } from "../../stores/data";
 import MarketOrdersTable from "./MarketOrdersTable.vue";
+import MarketRegion from "./MarketRegion.vue";
 
 const props = defineProps({
   type: {
     type: Number,
     required: true,
   },
-  region: {
-    type: Number,
-    required: true,
-  },
 });
 
+const configStore = useConfigStore();
 const dataStore = useDataStore();
 
 const headerLoading = ref(false);
@@ -51,7 +51,7 @@ async function initBody() {
   if (bodingLoading.value) return;
   try {
     bodingLoading.value = true;
-    const mos = await dataStore.readMarketOrders(props.region, props.type);
+    const mos = await dataStore.readMarketOrders(configStore.marketRegion, props.type);
     buyOrders.value = mos.filter((mo) => mo.isBuy);
     sellOrders.value = mos.filter((mo) => !mo.isBuy);
   } catch (err) {
@@ -70,7 +70,7 @@ watch(
   { immediate: true }
 );
 watch(
-  () => props.region,
+  () => configStore.marketRegion,
   () => {
     initBody();
   },
@@ -78,7 +78,17 @@ watch(
 </script>
 
 <style lang="less" scoped>
+.market-order-header {
+  display: flex;
+  justify-content: space-between;
+
+  h2 {
+    margin: 0;
+  }
+}
+
 .market-order-body {
+  margin-top: 5px;
   flex: 1;
   overflow: hidden;
 }

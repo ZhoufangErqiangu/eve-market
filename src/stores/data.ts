@@ -86,6 +86,17 @@ export const useDataStore = defineStore("data", () => {
     );
     return marketGroups.value;
   }
+  function readMarketGroup(id: number) {
+    function find(groups: MarketGroup[], id: number): MarketGroup | undefined {
+      for (const group of groups) {
+        if (group.id === id) return group;
+        const child = find(group.children, id);
+        if (child) return child;
+      }
+      return undefined;
+    }
+    return find(marketGroups.value, id);
+  }
 
   // regions
   const rss = localStorage.getItem(DATA_REGIONS_KEY);
@@ -184,6 +195,7 @@ export const useDataStore = defineStore("data", () => {
     // market
     marketGroups,
     readMarketGroups,
+    readMarketGroup,
     marketPrices,
     readMarketOrders,
 
