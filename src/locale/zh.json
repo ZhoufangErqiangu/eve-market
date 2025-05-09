@@ -20,6 +20,7 @@
   "config.save.btn": "保存",
   "config.save.success": "保存成功",
   "config.reset.btn": "重置",
+  "config.danger.title": "危险区域",
   "config.delete.btn": "删除",
   "config.delete.success": "删除成功",
 

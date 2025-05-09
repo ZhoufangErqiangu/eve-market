@@ -20,6 +20,7 @@
   "config.save.btn": "Save",
   "config.save.success": "Save success",
   "config.reset.btn": "Reset",
+  "config.danger.title": "Danger zone",
   "config.delete.btn": "Delete",
   "config.delete.success": "Delete success",
 
