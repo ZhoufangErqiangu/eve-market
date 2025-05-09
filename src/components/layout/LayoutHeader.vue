@@ -1,13 +1,13 @@
 <template>
-  <el-row class="box1 h100" justify="space-between" align="middle">
-    <el-col class="box11" :span="6">
-      <h1>
-        {{ $t(layoutStore.title) }}
+  <el-row class="layout-header" justify="space-between" align="middle">
+    <el-col :span="6">
+      <h1 style="margin: 0;">
+        {{ layoutStore.headerTitle }}
       </h1>
     </el-col>
-    <el-col class="box12" :span="18">
-      <el-space alignment="center">
-        <el-menu class="menu h100" :router="true" mode="horizontal" :default-active="defaultPath" :ellipsis="false">
+    <el-col class="box2" :span="18">
+      <el-space class="h100" alignment="center">
+        <el-menu class="menu" :router="true" mode="horizontal" :default-active="defaultPath" :ellipsis="false">
           <el-menu-item v-for="item in menuItems" :key="item.path" :index="item.path" :route="item.path">
             {{ $t(item.label) }}
           </el-menu-item>
@@ -32,9 +32,9 @@ import "element-plus/es/components/switch/style/css";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
+import LanguageSelect from "../../components/LanguageSelect.vue";
 import { LANG_KEY } from "../../locale";
 import { useLayoutStore } from "../../stores/layout";
-import LanguageSelect from "../../components/LanguageSelect.vue";
 
 const layoutStore = useLayoutStore();
 const route = useRoute();
@@ -45,7 +45,7 @@ interface MenuItem {
   path: string
 }
 const menuItems: MenuItem[] = [
-  { label: "Home", path: "/home" },
+  { label: "Home", path: "/" },
   { label: "Market", path: "/market" },
   // { label: "Missile", path: "/missile" },
   { label: "Config", path: "/config" },
@@ -62,23 +62,18 @@ const lang = computed({
 </script>
 
 <style lang="less" scoped>
-.box1 {
-  border-bottom: 1px solid var(--el-border-color);
-}
-
-.box11 {
+.layout-header {
   height: 100%;
+  border-bottom: 1px solid var(--el-border-color);
 
-  h1 {
+  .box2 {
     height: 100%;
+    text-align: end;
   }
-}
 
-.box12 {
-  text-align: end;
-}
-
-.menu {
-  border-bottom: none;
+  .menu {
+    height: 100%;
+    border-bottom: none;
+  }
 }
 </style>

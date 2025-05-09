@@ -5,7 +5,6 @@ import { defineConfig, type ConfigEnv } from "vite";
 // https://vitejs.dev/config/
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default defineConfig((_: ConfigEnv) => ({
-  base: "/",
   plugins: [vue(), version()],
   clearScreen: false,
   build: {

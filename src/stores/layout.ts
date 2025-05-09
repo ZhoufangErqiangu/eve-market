@@ -2,17 +2,17 @@ import { defineStore } from "pinia";
 import { ref, watch } from "vue";
 
 export const useLayoutStore = defineStore("layout", () => {
-  const title = ref(import.meta.env.VITE_APP_TITLE);
-  const desc = ref("");
+  const headerTitle = ref(import.meta.env.VITE_APP_TITLE);
+  const headerDesc = ref<string>();
   const messageCount = ref(0);
   const isDark = ref(
     (localStorage.getItem("layoutIsDark") ?? "true") === "true",
   );
   const menuCollapse = ref(false);
 
-  function setPage(param: { title: string; desc: string }) {
-    title.value = param.title;
-    desc.value = param.desc;
+  function setHeader(title: string, desc?: string) {
+    headerTitle.value = title;
+    headerDesc.value = desc;
   }
 
   function toggleMenuCollapse() {
@@ -41,9 +41,9 @@ export const useLayoutStore = defineStore("layout", () => {
   const isColumn = ref((window.visualViewport ?? window.screen).width < 768);
 
   return {
-    title,
-    desc,
-    setPage,
+    headerTitle,
+    headerDesc,
+    setHeader,
     isDark,
     messageCount,
     isColumn,

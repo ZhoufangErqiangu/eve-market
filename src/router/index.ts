@@ -4,10 +4,8 @@ import {
   type RouteLocationNormalized,
   type RouteRecordRaw,
 } from "vue-router";
-import MainLayout from "../layouts/main/MainLayout.vue";
-import NotFountView from "../views/system/NotFound.vue";
-import { mainRoute } from "./main";
 import { useLayoutStore } from "../stores/layout";
+import NotFountView from "../views/system/NotFound.vue";
 
 export interface RouteMeta {
   meta?: {
@@ -21,9 +19,33 @@ export type RouteRaw = RouteRecordRaw & RouteMeta;
 
 const routes: RouteRaw[] = [
   {
+    name: "index",
     path: "/",
-    component: MainLayout,
-    children: mainRoute,
+    component: async () => await import("../views/home/HomeView.vue"),
+  },
+  {
+    name: "market",
+    path: "/market",
+    component: async () => await import("../views/market/MarketView.vue"),
+    meta: {
+      title: "Market",
+    },
+  },
+  {
+    name: "missile",
+    path: "/missile",
+    component: async () => await import("../views/missile/MissileView.vue"),
+    meta: {
+      title: "Missile",
+    },
+  },
+  {
+    name: "config",
+    path: "/config",
+    component: async () => await import("../views/config/ConfigView.vue"),
+    meta: {
+      title: "Config",
+    },
   },
   {
     path: "/:pathMatch(.*)*",
@@ -35,33 +57,24 @@ const routes: RouteRaw[] = [
   },
 ];
 
-const base = "/";
 const title = import.meta.env.VITE_APP_TITLE ?? "";
 export const router = createRouter({
-  history: createWebHistory(base),
+  history: createWebHistory(),
   routes,
 });
 
 export type RouteNormalized = RouteLocationNormalized & RouteMeta;
 
-router.beforeEach((to, from) => {
-  // 避免无限重定向
-  if (to.fullPath === from.fullPath) return false;
-});
-
 router.afterEach((to) => {
   // debug
   if (import.meta.env.DEV) console.log("router to", to);
+
   const layoutStore = useLayoutStore();
-  // set browser title
+  // set title
   const subTitle = (to as RouteNormalized).meta?.title;
-  if (!subTitle) {
-    window.document.title = title;
-    layoutStore.setPage({ title, desc: "" });
-  } else {
-    window.document.title = `${title} | ${subTitle}`;
-    layoutStore.setPage({ title: subTitle, desc: "" });
-  }
+  const t = subTitle ? `${title} | ${subTitle}` : title;
+  window.document.title = t;
+  layoutStore.setHeader(t);
 });
 
 export default router;
