@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vue-tsc && vite build",
     "preview": "vite preview",
-    "push": "yarn version --patch && git push",
+    "push": "yarn version --patch && git push && git push --tags",
     "build:esi": "openapi-generator-cli generate -i https://ali-esi.evepc.163.com/latest/swagger.json -g typescript-fetch -o ./src/apis/esi"
   },
   "dependencies": {
