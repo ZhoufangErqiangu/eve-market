@@ -1,10 +1,9 @@
 import { version } from "@liuhlightning/vite-plugins";
 import vue from "@vitejs/plugin-vue";
-import { defineConfig, type ConfigEnv } from "vite";
+import { defineConfig } from "vite";
 
 // https://vitejs.dev/config/
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default defineConfig((_: ConfigEnv) => ({
+export default defineConfig({
   plugins: [vue(), version()],
   clearScreen: false,
   build: {
@@ -20,4 +19,4 @@ export default defineConfig((_: ConfigEnv) => ({
       },
     },
   },
-}));
+});
