@@ -41,6 +41,15 @@ export interface MarketOrder {
   duration: number;
 }
 
+export interface MarketHistory {
+  date: Date;
+  avg: number;
+  high: number;
+  low: number;
+  count: number;
+  volume: number;
+}
+
 export const useDataStore = defineStore("data", () => {
   const m = new MarketApi();
   const u = new UniverseApi();
@@ -181,6 +190,27 @@ export const useDataStore = defineStore("data", () => {
     });
   }
 
+  // market history
+  async function readMarketHistory(
+    region: number,
+    type: number,
+  ): Promise<Array<MarketHistory>> {
+    const hs = await m.getMarketsRegionIdHistory({
+      regionId: region,
+      typeId: type,
+    });
+    return hs.map((h) => {
+      return {
+        date: new Date(h.date),
+        avg: h.average,
+        high: h.highest,
+        low: h.lowest,
+        count: h.orderCount,
+        volume: h.volume,
+      };
+    });
+  }
+
   // delete data
   function deleteData() {
     marketGroups.value = [];
@@ -198,6 +228,7 @@ export const useDataStore = defineStore("data", () => {
     readMarketGroup,
     marketPrices,
     readMarketOrders,
+    readMarketHistory,
 
     // regions
     regions,

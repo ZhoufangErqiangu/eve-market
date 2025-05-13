@@ -32,6 +32,8 @@
   "market.region.label": "星域",
   "market.orders.header.loading": "加载中",
   "market.orders.header.unknown": "未知",
+  "market.orders.current": "当前",
+  "market.orders.history": "历史",
   "market.order.table.quanity": "数量",
   "market.order.table.price": "价格",
   "market.order.table.duration": "剩余时间",

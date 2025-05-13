@@ -14,8 +14,8 @@ import { ElOption, ElSelect } from "element-plus";
 import "element-plus/es/components/option/style/css";
 import "element-plus/es/components/select/style/css";
 import { computed } from "vue";
-import { useConfigStore } from "../../stores/config";
-import { useDataStore } from "../../stores/data";
+import { useConfigStore } from "../../../stores/config";
+import { useDataStore } from "../../../stores/data";
 
 const dataStore = useDataStore();
 const configStore = useConfigStore();

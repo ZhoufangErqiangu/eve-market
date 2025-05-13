@@ -5,7 +5,7 @@
     </el-aside>
     <el-main class="pt0 pb0 pr0">
       <el-tabs v-model="activeTab" class="h100">
-        <el-tab-pane class="pane-order" :label="$t('market.orders.label')" name="order">
+        <el-tab-pane class="pane-order pane-order-current" :label="$t('market.orders.label')" name="order">
           <MarketOrders v-if="activeType" :type="activeType" />
           <el-empty v-else :description="$t('market.orders.empty')" />
         </el-tab-pane>
@@ -25,9 +25,9 @@ import "element-plus/es/components/tab-pane/style/css";
 import "element-plus/es/components/tabs/style/css";
 import { ref } from "vue";
 import { type MarketGroup, useDataStore } from "../../stores/data";
-import MarketGroups from "./MarketGroups.vue";
-import MarketItems from "./MarketItems.vue";
-import MarketOrders from "./MarketOrders.vue";
+import MarketItems from "./item/MarketItems.vue";
+import MarketGroups from "./menu/MarketGroups.vue";
+import MarketOrders from "./order/MarketOrders.vue";
 
 const dataStore = useDataStore();
 
@@ -55,8 +55,18 @@ function onItemsType(id: number) {
 .pane-order {
   height: 100%;
   overflow: hidden;
+}
+
+.pane-order-current {
+  height: 100%;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
+}
+
+.pane-order-history {
+  height: 100%;
+  overflow: hidden;
 }
 
 .pane-group {

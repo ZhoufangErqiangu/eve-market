@@ -17,8 +17,8 @@
 import { ElMessage } from "element-plus";
 import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { useConfigStore } from "../../stores/config";
-import { type MarketOrder, useDataStore } from "../../stores/data";
+import { useConfigStore } from "../../../stores/config";
+import { type MarketOrder, useDataStore } from "../../../stores/data";
 import MarketOrdersTable from "./MarketOrdersTable.vue";
 import MarketRegion from "./MarketRegion.vue";
 
@@ -71,7 +71,7 @@ watch(
     initHeader();
     initBody();
   },
-  { immediate: true }
+  { immediate: true },
 );
 watch(
   () => configStore.marketRegion,

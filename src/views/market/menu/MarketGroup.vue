@@ -22,7 +22,7 @@ import { ArrowDownBold } from "@element-plus/icons-vue";
 import { ElIcon } from "element-plus";
 import "element-plus/es/components/icon/style/css";
 import { ref, type PropType } from "vue";
-import { type MarketGroup as MarketGroupType } from "../../stores/data";
+import { type MarketGroup as MarketGroupType } from "../../../stores/data";
 import MarketTypes from "./MarketTypes.vue";
 
 const props = defineProps({

@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useDataStore } from "../../stores/data";
+import { useDataStore } from "../../../stores/data";
 import MarketGroup from "./MarketGroup.vue";
 
 const emits = defineEmits(["group", "type"]);

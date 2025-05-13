@@ -32,6 +32,8 @@
   "market.region.label": "Region",
   "market.orders.header.loading": "Loading",
   "market.orders.header.unknown": "Unknown",
+  "market.orders.current": "Current",
+  "market.orders.history": "History",
   "market.order.table.quanity": "Quanity",
   "market.order.table.price": "Price",
   "market.order.table.duration": "Duration",

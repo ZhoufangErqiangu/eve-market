@@ -6,7 +6,7 @@
 
 <script lang="ts" setup>
 import { onMounted, type PropType, ref } from "vue";
-import { useDataStore } from "../../stores/data";
+import { useDataStore } from "../../../stores/data";
 import MarketType from "./MarketType.vue";
 
 interface MarketType {

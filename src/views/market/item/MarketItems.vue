@@ -4,7 +4,7 @@
 
 <script lang="ts" setup>
 import { type PropType, ref, watch } from "vue";
-import { useDataStore } from "../../stores/data";
+import { useDataStore } from "../../../stores/data";
 import MarketItem from "./MarketItem.vue";
 
 interface MarketType {

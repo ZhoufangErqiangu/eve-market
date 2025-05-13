@@ -23,7 +23,7 @@ import { ElCol, ElRow } from "element-plus";
 import "element-plus/es/components/col/style/css";
 import "element-plus/es/components/row/style/css";
 import { computed, type PropType } from "vue";
-import { useDataStore } from "../../stores/data";
+import { useDataStore } from "../../../stores/data";
 import MarketItemPrice from "./MarketItemPrice.vue";
 
 interface MarketType {
