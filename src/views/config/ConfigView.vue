@@ -14,20 +14,11 @@
       </el-button>
     </el-form-item>
   </el-form>
-  <el-collapse>
-    <el-collapse-item :title="$t('config.danger.title')" name="danger">
-      <el-button type="danger" @click="onDelete">
-        {{ $t('config.delete.btn') }}
-      </el-button>
-    </el-collapse-item>
-  </el-collapse>
 </template>
 
 <script lang="ts" setup>
-import { ElButton, ElCollapse, ElCollapseItem, ElForm, ElFormItem, ElMessage, ElOption, ElSelect } from "element-plus";
+import { ElButton, ElForm, ElFormItem, ElMessage, ElOption, ElSelect } from "element-plus";
 import "element-plus/es/components/button/style/css";
-import "element-plus/es/components/collapse-item/style/css";
-import "element-plus/es/components/collapse/style/css";
 import "element-plus/es/components/form-item/style/css";
 import "element-plus/es/components/form/style/css";
 import "element-plus/es/components/option/style/css";
@@ -35,11 +26,9 @@ import "element-plus/es/components/select/style/css";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useConfigStore } from "../../stores/config";
-import { useDataStore } from "../../stores/data";
 
 const { t } = useI18n();
 const configStore = useConfigStore();
-const dataStore = useDataStore();
 
 const form = ref({
   esiDataSource: configStore.esiDataSource,
@@ -51,9 +40,5 @@ function onSave() {
 }
 function onReset() {
   form.value.esiDataSource = configStore.esiDataSource;
-}
-function onDelete() {
-  dataStore.deleteData();
-  ElMessage.success(t("config.delete.success"));
 }
 </script>
