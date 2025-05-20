@@ -32,6 +32,15 @@ const routes: RouteRaw[] = [
     },
   },
   {
+    name: "manufacture",
+    path: "/manufacture",
+    component: async () =>
+      await import("../views/manufacture/ManufactureView.vue"),
+    meta: {
+      title: "Manufacture",
+    },
+  },
+  {
     name: "config",
     path: "/config",
     component: async () => await import("../views/config/ConfigView.vue"),

@@ -7,6 +7,7 @@
 
   "layout.header.menu.home": "Home",
   "layout.header.menu.market": "Market",
+  "layout.header.menu.manufacture": "Manufacture",
   "layout.header.menu.config": "Config",
 
   "home.init.header": "Init",
@@ -38,5 +39,11 @@
   "market.order.table.price": "Price",
   "market.order.table.duration": "Duration",
   "market.item.avg": "Average price",
-  "market.item.adj": "Adjusted price"
+  "market.item.adj": "Adjusted price",
+
+  "manufacture.title": "Manufacture",
+  "manufacture.create": "Create",
+  "manufacture.save": "Save",
+  "manufacture.cancel": "Cancel",
+  "manufacture.delete": "Delete"
 }

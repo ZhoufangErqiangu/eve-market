@@ -7,6 +7,7 @@
 
   "layout.header.menu.home": "首页",
   "layout.header.menu.market": "市场",
+  "layout.header.menu.manufacture": "制造",
   "layout.header.menu.config": "配置",
 
   "config.esi.datasource": "数据源",
@@ -34,5 +35,11 @@
   "market.order.table.price": "价格",
   "market.order.table.duration": "剩余时间",
   "market.item.avg": "平均价格",
-  "market.item.adj": "调整后价格"
+  "market.item.adj": "调整后价格",
+
+  "manufacture.title": "制造",
+  "manufacture.create": "创建",
+  "manufacture.save": "保存",
+  "manufacture.cancel": "取消",
+  "manufacture.delete": "删除"
 }

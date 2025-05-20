@@ -45,6 +45,7 @@ interface MenuItem {
 const menuItems: MenuItem[] = [
   { label: "layout.header.menu.home", path: "/" },
   { label: "layout.header.menu.market", path: "/market" },
+  { label: "layout.header.menu.manufacture", path: "/manufacture" },
   { label: "layout.header.menu.config", path: "/config" },
 ];
 
