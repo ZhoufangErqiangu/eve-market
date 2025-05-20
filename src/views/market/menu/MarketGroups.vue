@@ -5,18 +5,18 @@
 </template>
 
 <script lang="ts" setup>
-import { useDataStore } from "../../../stores/data";
+import { useDataStore, type MarketType } from "../../../stores/data";
 import MarketGroup from "./MarketGroup.vue";
 
 const emits = defineEmits(["group", "type"]);
 
 const dataStore = useDataStore();
 
-function onGroup(id: number) {
-  emits("group", id);
+function onGroup(group: number) {
+  emits("group", group);
 }
-function onType(id: number, group: number) {
-  emits("type", id, group);
+function onType(type: MarketType, group: number) {
+  emits("type", type, group);
 }
 </script>
 

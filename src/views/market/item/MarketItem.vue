@@ -23,13 +23,8 @@ import { ElCol, ElRow } from "element-plus";
 import "element-plus/es/components/col/style/css";
 import "element-plus/es/components/row/style/css";
 import { computed, type PropType } from "vue";
-import { useDataStore } from "../../../stores/data";
+import { useDataStore, type MarketType } from "../../../stores/data";
 import MarketItemPrice from "./MarketItemPrice.vue";
-
-interface MarketType {
-  id: number;
-  name: string;
-}
 
 const dataStore = useDataStore();
 
@@ -46,7 +41,7 @@ const price = computed(() => {
 });
 
 function onClick() {
-  emits("type", props.data.id);
+  emits("type", props.data);
 }
 </script>
 

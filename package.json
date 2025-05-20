@@ -8,7 +8,8 @@
     "build": "vue-tsc && vite build",
     "preview": "vite preview",
     "push": "yarn version --patch && git push && git push --tags",
-    "build:esi": "openapi-generator-cli generate -i https://ali-esi.evepc.163.com/latest/swagger.json -g typescript-fetch -o ./src/apis/esi"
+    "build:esi": "openapi-generator-cli generate -i https://ali-esi.evepc.163.com/latest/swagger.json -g typescript-fetch -o ./src/apis/esi",
+    "build:sde": "node ./scripts/sde.js"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
@@ -33,7 +34,8 @@
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.18.0",
     "vite": "^6.0.3",
-    "vue-tsc": "^2.1.10"
+    "vue-tsc": "^2.1.10",
+    "yaml": "^2.8.0"
   },
   "engines": {
     "node": "^20"

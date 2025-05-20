@@ -1,5 +1,5 @@
 <template>
-  <div v-loading="headerLoading" class="market-order-header">
+  <div class="market-order-header">
     <h2>
       {{ name }}
     </h2>
@@ -15,47 +15,34 @@
 
 <script lang="ts" setup>
 import { ElMessage } from "element-plus";
-import { ref, watch } from "vue";
-import { useI18n } from "vue-i18n";
+import { computed, ref, watch, type PropType } from "vue";
 import { useConfigStore } from "../../../stores/config";
-import { type MarketOrder, useDataStore } from "../../../stores/data";
+import { useDataStore, type MarketOrder, type MarketType } from "../../../stores/data";
 import MarketOrdersTable from "./MarketOrdersTable.vue";
 import MarketRegion from "./MarketRegion.vue";
 
 const props = defineProps({
   type: {
-    type: Number,
+    type: Object as PropType<MarketType>,
     required: true,
   },
 });
 
-const { t } = useI18n();
 const configStore = useConfigStore();
 const dataStore = useDataStore();
 
-const headerLoading = ref(false);
 const bodyLoading = ref(false);
-const name = ref(t("market.orders.header.loading"));
+const name = computed(() => {
+  return props.type.name;
+});
 const buyOrders = ref<MarketOrder[]>([]);
 const sellOrders = ref<MarketOrder[]>([]);
 
-async function initHeader() {
-  if (headerLoading.value) return;
-  try {
-    headerLoading.value = true;
-    const ns = await dataStore.readNames([props.type]);
-    name.value = ns[props.type] ?? t("market.orders.header.unknown");
-  } catch (err) {
-    console.error("init header error", err);
-    ElMessage.error("Init error");
-  }
-  headerLoading.value = false;
-}
 async function initBody() {
   if (bodyLoading.value) return;
   try {
     bodyLoading.value = true;
-    const mos = await dataStore.readMarketOrders(configStore.marketRegion, props.type);
+    const mos = await dataStore.readMarketOrders(configStore.marketRegion, props.type.id);
     buyOrders.value = mos.filter((mo) => mo.isBuy);
     sellOrders.value = mos.filter((mo) => !mo.isBuy);
   } catch (err) {
@@ -68,7 +55,6 @@ async function initBody() {
 watch(
   () => props.type,
   () => {
-    initHeader();
     initBody();
   },
   { immediate: true },

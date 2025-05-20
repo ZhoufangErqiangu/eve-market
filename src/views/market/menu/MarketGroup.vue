@@ -22,7 +22,7 @@ import { ArrowDownBold } from "@element-plus/icons-vue";
 import { ElIcon } from "element-plus";
 import "element-plus/es/components/icon/style/css";
 import { ref, type PropType } from "vue";
-import { type MarketGroup as MarketGroupType } from "../../../stores/data";
+import { type MarketGroup as MarketGroupType, type MarketType } from "../../../stores/data";
 import MarketTypes from "./MarketTypes.vue";
 
 const props = defineProps({
@@ -39,15 +39,15 @@ function onCollapse(ev: MouseEvent) {
   isCollapsed.value = !isCollapsed.value;
   if (!isCollapsed.value) emits("group", props.data.id);
 }
-function onType(id: number) {
-  emits("type", id, props.data.id);
+function onType(type: MarketType) {
+  emits("type", type, props.data.id);
 }
 
-function onChildGroup(id: number) {
-  emits("group", id);
+function onChildGroup(group: number) {
+  emits("group", group);
 }
-function onChildType(id: number, group: number) {
-  emits("type", id, group);
+function onChildType(type: MarketType, group: number) {
+  emits("type", type, group);
 }
 </script>
 

@@ -6,11 +6,7 @@
 
 <script lang="ts" setup>
 import { type PropType } from "vue";
-
-interface MarketType {
-  id: number;
-  name: string;
-}
+import type { MarketType } from "../../../stores/data";
 
 const props = defineProps({
   data: {
@@ -22,7 +18,7 @@ const emits = defineEmits(["type"]);
 
 function onClick(ev: MouseEvent) {
   ev.stopPropagation();
-  emits("type", props.data.id);
+  emits("type", props.data);
 }
 </script>
 

@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 import EsiDatasourceJson from "../assets/json/esi-datasource.json";
+import EsiRegionJson from "../assets/json/esi-region.json";
 
 export interface Config {
   esiDataSource?: string;
@@ -46,6 +47,12 @@ export const useConfigStore = defineStore("config", () => {
       save();
     },
   });
+  const marketRegionOptions = EsiRegionJson.map((r) => {
+    return {
+      label: r.name,
+      value: r.id,
+    };
+  });
 
   function save() {
     localStorage.setItem(
@@ -61,6 +68,7 @@ export const useConfigStore = defineStore("config", () => {
     esiDataSource,
     esiDataSourceOptions,
     marketRegion,
+    marketRegionOptions,
     save,
   };
 });

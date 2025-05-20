@@ -24,7 +24,7 @@ import "element-plus/es/components/empty/style/css";
 import "element-plus/es/components/tab-pane/style/css";
 import "element-plus/es/components/tabs/style/css";
 import { ref } from "vue";
-import { type MarketGroup, useDataStore } from "../../stores/data";
+import { type MarketGroup, type MarketType, useDataStore } from "../../stores/data";
 import MarketItems from "./item/MarketItems.vue";
 import MarketGroups from "./menu/MarketGroups.vue";
 import MarketOrders from "./order/MarketOrders.vue";
@@ -33,21 +33,21 @@ const dataStore = useDataStore();
 
 const activeTab = ref("group");
 const activeGroup = ref<MarketGroup>();
-const activeType = ref(0);
+const activeType = ref<MarketType>();
 
-function onGroup(id: number) {
+function onGroup(group: number) {
   activeTab.value = "group";
-  activeGroup.value = dataStore.readMarketGroup(id);
-  activeType.value = 0;
+  activeGroup.value = dataStore.readMarketGroup(group);
+  activeType.value = undefined;
 }
-function onType(id: number, group: number) {
+function onType(type: MarketType, group: number) {
   activeTab.value = "order";
   activeGroup.value = dataStore.readMarketGroup(group);
-  activeType.value = id;
+  activeType.value = type;
 }
-function onItemsType(id: number) {
+function onItemsType(type: MarketType) {
   activeTab.value = "order";
-  activeType.value = id;
+  activeType.value = type;
 }
 </script>
 
