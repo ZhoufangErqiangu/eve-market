@@ -9,12 +9,8 @@
   "layout.header.menu.market": "市场",
   "layout.header.menu.config": "配置",
 
-  "home.init.header": "初始化",
-  "home.init.desc": "如果这是你第一次使用此工具，请点击'初始化'按钮",
-  "home.init.btn": "初始化",
-
   "config.esi.datasource": "数据源",
-  "config.esi.datasource.serenity": "宁静",
+  "config.esi.datasource.serenity": "晨曦",
   "config.esi.datasource.infinity": "Infinity",
   "config.esi.datasource.tranquility": "Tranquility",
   "config.save.btn": "保存",
