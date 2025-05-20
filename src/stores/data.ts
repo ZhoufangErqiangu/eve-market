@@ -13,7 +13,7 @@ interface SdeMarketGroup {
 
 interface SdeType {
   id: string;
-  name: string;
+  name?: string;
   marketGroupID?: number;
 }
 
@@ -46,7 +46,7 @@ function buildMarketGroups(): Array<MarketGroup> {
       types: sde.hasTypes
         ? tt
             .filter((t) => t.marketGroupID === id)
-            .map((t) => ({ id: parseInt(t.id), name: t.name }))
+            .map((t) => ({ id: parseInt(t.id), name: t.name ?? "" }))
         : [],
     };
   };
@@ -167,6 +167,11 @@ export const useDataStore = defineStore("data", () => {
     });
   }
 
+  // type
+  function readTypeName(id: string): string | undefined {
+    return (SdeTypesJson as Record<string, SdeType>)[id]?.name;
+  }
+
   return {
     // market
     marketGroups,
@@ -174,5 +179,7 @@ export const useDataStore = defineStore("data", () => {
     marketPrices,
     readMarketOrders,
     readMarketHistory,
+    // type
+    readTypeName,
   };
 });
