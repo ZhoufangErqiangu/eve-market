@@ -22,7 +22,7 @@
       </div>
     </el-header>
     <el-main class="pl0 pb0 pr0">
-      <!-- todo -->
+      <ManufactureProducts v-model="products" />
     </el-main>
   </el-container>
 </template>
@@ -31,6 +31,14 @@
 import { ElButton, ElContainer, ElHeader, ElMain } from "element-plus";
 import "element-plus/es/components/button/style/css";
 import "element-plus/es/components/container/style/css";
+import { ref } from "vue";
+import { type ManufactureItem } from ".";
+import ManufactureProducts from "./product/ManufactureProducts.vue";
+
+const products = ref<Array<ManufactureItem>>([{
+  quantity: 1,
+  source: "manufacture",
+}]);
 
 function onCreate() {
   // todo
