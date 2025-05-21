@@ -146,8 +146,6 @@ function buildManufactureBlueprints(): [
   return [byType, byProduct];
 }
 
-const BLUEPRINT_MARKET_GROUP_ID = 2;
-
 interface BlueprintOption {
   label: string;
   value: number;
@@ -158,27 +156,32 @@ interface BlueprintOption {
  * blueprint options for select, value is blueprint type id
  */
 function buildBlueprintOptions(
+  blueprints: Record<number, ManufactureBlueprint>,
   marketGroups: MarketGroup[],
 ): Array<BlueprintOption> {
   const res: Array<BlueprintOption> = [];
   for (const g of marketGroups) {
-    let cc: Array<BlueprintOption> | undefined = undefined;
+    let cc: Array<BlueprintOption> = [];
 
     // add children
     if (g.children.length > 0) {
-      cc = buildBlueprintOptions(g.children);
+      cc = buildBlueprintOptions(blueprints, g.children);
     }
 
     // add types
     if (g.types.length > 0) {
-      if (!cc) cc = [];
       for (const t of g.types) {
+        // check if type has blueprint
+        if (!blueprints[t.id]) continue;
         cc.push({
           label: t.name,
           value: t.id,
         });
       }
     }
+
+    // skip empty group
+    if (!cc?.length) continue;
 
     res.push({
       label: g.name,
@@ -286,8 +289,8 @@ export const useDataStore = defineStore("data", () => {
     return blueprintsByProduct[product];
   }
   const blueprintOptions = buildBlueprintOptions(
-    marketGroups.find((g) => g.id === BLUEPRINT_MARKET_GROUP_ID)?.children ??
-      [],
+    blueprintsByProduct,
+    marketGroups,
   );
 
   return {
