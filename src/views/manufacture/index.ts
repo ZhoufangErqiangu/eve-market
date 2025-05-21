@@ -8,13 +8,11 @@ export interface ManufactureProductType {
 }
 
 export interface ManufactureItemType {
-  type?: number;
+  type: number;
   quantity: number;
+  canManufacture?: boolean;
+  isOriginal?: boolean;
   price?: number;
   source: ManufactureItemSource;
-}
-
-export interface ManufactureLayerType {
-  id: string;
-  items: ManufactureItemType[];
+  incomes?: Array<ManufactureProductType>;
 }

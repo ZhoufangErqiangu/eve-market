@@ -41,5 +41,6 @@
   "manufacture.save": "保存",
   "manufacture.cancel": "取消",
   "manufacture.delete": "删除",
-  "manufacture.products.title": "产出"
+  "manufacture.products.title": "产出",
+  "manufacture.items.title": "物品"
 }
