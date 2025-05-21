@@ -15,12 +15,12 @@
 import { ElButton } from "element-plus";
 import "element-plus/es/components/button/style/css";
 import { type PropType } from "vue";
-import { type ManufactureItem, type ManufactureLayer } from ".";
+import { type ManufactureItemType, type ManufactureLayerType } from ".";
 import ManufactureItemComponent from "./ManufactureItem.vue";
 
 const props = defineProps({
   data: {
-    type: Object as PropType<ManufactureLayer>,
+    type: Object as PropType<ManufactureLayerType>,
     required: true,
   },
   allowDelete: {
@@ -30,7 +30,7 @@ const props = defineProps({
 });
 const emits = defineEmits(["change", "delete"]);
 
-function onItemChange(item: ManufactureItem) {
+function onItemChange(item: ManufactureItemType) {
   const idx = props.data.items.findIndex((i) => i.type === item.type);
   if (idx === -1) return;
   const ll = Array.from(props.data.items);

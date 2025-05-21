@@ -33,7 +33,6 @@ const localBlueprint = computed<number[] | undefined>({
     if (!value) {
       emits("change", { ...props.data, type: undefined, maketType: undefined });
     } else {
-      console.log("value", value);
       emits("change", { ...props.data, type: value[value.length - 1], maketType: value });
     }
   },
@@ -55,6 +54,8 @@ function onDelete() {
 
 <style lang="less" scoped>
 .manufacture-product {
+  width: 220px;
+
   display: flex;
   flex-direction: column;
   align-items: stretch;

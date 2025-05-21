@@ -45,5 +45,6 @@
   "manufacture.create": "Create",
   "manufacture.save": "Save",
   "manufacture.cancel": "Cancel",
-  "manufacture.delete": "Delete"
+  "manufacture.delete": "Delete",
+  "manufacture.products.title": "Products"
 }
