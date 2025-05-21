@@ -15,13 +15,13 @@
 import { Plus } from "@element-plus/icons-vue";
 import { ElIcon } from "element-plus";
 import "element-plus/es/components/icon/style/css";
-import { type ManufactureItem } from "../";
+import { type ManufactureProductType } from "../";
 import { computed, type PropType } from "vue";
 import ManufactureProudct from "./ManufactureProudct.vue";
 
 const props = defineProps({
   modelValue: {
-    type: Array as PropType<Array<ManufactureItem>>,
+    type: Array as PropType<Array<ManufactureProductType>>,
     default: () => [],
   },
 });
@@ -32,24 +32,12 @@ const localList = computed(() => {
     return {
       id: `${i.type}-${idx}`,
       item: i,
-      onChange: (value: ManufactureItem) => {
-        // item should be unique
-        const list = [
+      onChange: (value: ManufactureProductType) => {
+        emits("update:modelValue", [
           ...props.modelValue.slice(0, idx),
           value,
           ...props.modelValue.slice(idx + 1),
-        ];
-        const um: Record<string, ManufactureItem> = {};
-        for (const i of list) {
-          const tt = i.type ?? "undefined";
-          if (um[tt]) {
-            um[tt].quantity += i.quantity;
-          } else {
-            um[tt] = i;
-          }
-        }
-
-        emits("update:modelValue", Object.values(um));
+        ]);
       },
       onDelete: () => {
         emits("update:modelValue", [

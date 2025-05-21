@@ -1,6 +1,6 @@
 <template>
   <div class="manufacture-product">
-    <el-cascader v-model="localBlueprint" :options="dataStroe.blueprintOptions" />
+    <el-cascader v-model="localBlueprint" :options="dataStroe.blueprintOptions" :show-all-levels="false" />
     <div class="box2">
       <el-input-number v-model="localQuantity" :min="1" :step="1" />
       <el-button :icon="Close" type="danger" @click="onDelete" />
@@ -14,12 +14,12 @@ import { ElButton, ElCascader, ElInputNumber } from "element-plus";
 import "element-plus/es/components/cascader/style/css";
 import "element-plus/es/components/input-number/style/css";
 import { computed, type PropType } from "vue";
-import { type ManufactureItem } from "../";
+import { type ManufactureProductType } from "../";
 import { useDataStore } from "../../../stores/data";
 
 const props = defineProps({
   data: {
-    type: Object as PropType<ManufactureItem>,
+    type: Object as PropType<ManufactureProductType>,
     required: true,
   },
 });
@@ -27,24 +27,14 @@ const emits = defineEmits(["change", "delete"]);
 
 const dataStroe = useDataStore();
 
-const localBlueprint = computed({
-  get: () => {
-    if (!props.data.type) return undefined;
-    const b = dataStroe.readBlueprint(props.data.type);
-    return b?.type;
-  },
+const localBlueprint = computed<number[] | undefined>({
+  get: () => props.data.maketType,
   set: (value) => {
     if (!value) {
-      emits("change", {
-        ...props.data,
-        type: undefined,
-      });
+      emits("change", { ...props.data, type: undefined, maketType: undefined });
     } else {
-      const b = dataStroe.readBlueprint(value);
-      emits("change", {
-        ...props.data,
-        type: b?.product,
-      });
+      console.log("value", value);
+      emits("change", { ...props.data, type: value[value.length - 1], maketType: value });
     }
   },
 });
@@ -65,8 +55,6 @@ function onDelete() {
 
 <style lang="less" scoped>
 .manufacture-product {
-  width: 300px;
-
   display: flex;
   flex-direction: column;
   align-items: stretch;

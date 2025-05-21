@@ -32,12 +32,11 @@ import { ElButton, ElContainer, ElHeader, ElMain } from "element-plus";
 import "element-plus/es/components/button/style/css";
 import "element-plus/es/components/container/style/css";
 import { ref } from "vue";
-import { type ManufactureItem } from ".";
+import { type ManufactureProductType } from ".";
 import ManufactureProducts from "./product/ManufactureProducts.vue";
 
-const products = ref<Array<ManufactureItem>>([{
+const products = ref<Array<ManufactureProductType>>([{
   quantity: 1,
-  source: "manufacture",
 }]);
 
 function onCreate() {
