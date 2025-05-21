@@ -3,7 +3,7 @@
     <el-cascader v-model="localBlueprint" :options="dataStroe.blueprintOptions" :show-all-levels="false" />
     <div class="box2">
       <el-input-number v-model="localQuantity" :min="1" :step="1" />
-      <el-button :icon="Close" type="danger" @click="onDelete" />
+      <el-button size="small" :icon="Close" type="danger" @click="onDelete" />
     </div>
   </div>
 </template>
@@ -67,7 +67,7 @@ function onDelete() {
   .box2 {
     display: flex;
     justify-content: space-between;
-    text-align: right;
+    align-items: end;
   }
 }
 </style>

@@ -5,20 +5,8 @@
         <h2>
           {{ $t("manufacture.title") }}
         </h2>
-        <div>
-          <el-button type="primary" size="small" @click="onCreate">
-            {{ $t("manufacture.create") }}
-          </el-button>
-          <el-button type="primary" size="small" @click="onSave">
-            {{ $t("manufacture.save") }}
-          </el-button>
-          <el-button size="small" @click="onCancel">
-            {{ $t("manufacture.cancel") }}
-          </el-button>
-          <el-button type="danger" size="small" @click="onDelete">
-            {{ $t("manufacture.delete") }}
-          </el-button>
-        </div>
+        <ManufactureRecipeComponent v-model="recipe" :options="recipeOptions" @save="onSave" @cancel="onCancel"
+          @delete="onDelete" />
       </div>
     </el-header>
     <el-main class="pl0 pb0 pr0">
@@ -28,29 +16,53 @@
 </template>
 
 <script lang="ts" setup>
-import { ElButton, ElContainer, ElHeader, ElMain } from "element-plus";
-import "element-plus/es/components/button/style/css";
+import { ElContainer, ElHeader, ElMain, ElMessage } from "element-plus";
 import "element-plus/es/components/container/style/css";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { type ManufactureProductType } from ".";
 import ManufactureProducts from "./product/ManufactureProducts.vue";
+import { loadManufactureLastRecipeKey, loadManufactureRecipe, loadManufactureRecipes, removeManufactureRecipe, saveManufactureRecipe } from "./recipe";
+import ManufactureRecipeComponent from "./recipe/ManufactureRecipe.vue";
+
+const recipe = ref<string | undefined>(loadManufactureLastRecipeKey());
+const recipeOptions = ref<Array<{ label: string, value: string }>>(loadManufactureRecipes());
 
 const products = ref<Array<ManufactureProductType>>([{
   quantity: 1,
 }]);
 
-function onCreate() {
+function onLoad(key: string) {
+  const r = loadManufactureRecipe(key);
+  if (!r) return;
   // todo
 }
 function onSave() {
-  // todo
+  if (!recipe.value) {
+    ElMessage.warning("Must input recipe name");
+    return;
+  }
+
+  saveManufactureRecipe({ name: recipe.value });
+  recipeOptions.value = loadManufactureRecipes();
 }
 function onCancel() {
-  // todo
+  if (!recipe.value) return;
+  onLoad(recipe.value);
 }
 function onDelete() {
-  // todo
+  products.value = [{ quantity: 1 }];
+
+  if (!recipe.value) return;
+  removeManufactureRecipe(recipe.value);
+  recipeOptions.value = loadManufactureRecipes();
+  recipe.value = undefined;
 }
+
+watch(recipe, (val, oldVal) => {
+  if (!val) return;
+  else if (val === oldVal) return;
+  onLoad(val);
+}, { immediate: true });
 </script>
 
 <style lang="less" scoped>
