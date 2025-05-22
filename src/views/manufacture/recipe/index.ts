@@ -1,8 +1,11 @@
+import { type ManufactureProductType } from "..";
+
 const MANUFACTURE_RECIPES_KEY = "manufacture.recipes";
 const MANUFACTURE_LAST_RECIPE_KEY = "manufacture.last_recipe";
 
 export interface ManufactureRecipe {
   name: string;
+  products: Array<ManufactureProductType>;
 }
 
 function buildManufactureRecipeKey(name: string): string {

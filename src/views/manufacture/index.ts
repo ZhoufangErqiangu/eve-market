@@ -1,5 +1,4 @@
 import type { ManufactureBlueprint } from "../../stores/data";
-import { fixDecimals } from "../../utils/math";
 
 export type ManufactureItemSource = "manufacture" | "purchase" | "original";
 
@@ -71,9 +70,7 @@ export function calculateProductCost(product: ManufactureProductType): number {
     }
   };
 
-  return fixDecimals(
-    product.materials?.reduce((acc, m) => acc + cal(m), 0) ?? 0,
-  );
+  return product.materials?.reduce((acc, m) => acc + cal(m), 0) ?? 0;
 }
 
 export interface ManufactureItemType {

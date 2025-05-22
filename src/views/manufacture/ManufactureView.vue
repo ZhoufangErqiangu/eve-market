@@ -9,7 +9,7 @@
           @delete="onDelete" />
       </div>
     </el-header>
-    <el-main class="pl0 pb0 pr0">
+    <el-main class="pl0 pb0 pr10">
       <ManufactureProducts v-model="products" />
     </el-main>
   </el-container>
@@ -32,7 +32,7 @@ const products = ref<Array<ManufactureProductType>>([buildInitProduct()]);
 function onLoad(key: string) {
   const r = loadManufactureRecipe(key);
   if (!r) return;
-  // todo
+  products.value = r.products;
 }
 function onSave() {
   if (!recipe.value) {
@@ -40,7 +40,7 @@ function onSave() {
     return;
   }
 
-  saveManufactureRecipe({ name: recipe.value });
+  saveManufactureRecipe({ name: recipe.value, products: products.value });
   recipeOptions.value = loadManufactureRecipes();
 }
 function onCancel() {

@@ -1,10 +1,10 @@
 <template>
   <div class="manufacture-product">
     <div class="item">
-      <el-space>
+      <div class="header">
         <el-cascader v-model="localType" :options="dataStroe.blueprintOptions" :show-all-levels="false" />
         <el-button size="small" :icon="Close" type="danger" @click="onDelete" />
-      </el-space>
+      </div>
       <el-input-number v-model="localQuantity" :min="1" :step="1" />
       <div class="isk">
         <div class="text1">
@@ -36,14 +36,14 @@
 
 <script lang="ts" setup>
 import { Close } from "@element-plus/icons-vue";
-import { ElButton, ElCascader, ElInputNumber, ElSpace } from "element-plus";
+import { ElButton, ElCascader, ElInputNumber } from "element-plus";
 import "element-plus/es/components/cascader/style/css";
 import "element-plus/es/components/input-number/style/css";
-import "element-plus/es/components/space/style/css";
 import { computed, type PropType } from "vue";
 import { buildNewProduct, calculateProductCost, type ManufactureItemType, type ManufactureProductType } from "../";
 import { useDataStore } from "../../../stores/data";
 import ManufactureItem from "../item/ManufactureItem.vue";
+import { formatNumber } from "../../../utils/math";
 
 const props = defineProps({
   data: {
@@ -85,11 +85,11 @@ const localMaterials = computed(() => {
     return {
       data: m,
       onChange: (item: ManufactureItemType) => {
-        const newMaterials = [...props.data.materials!];
-        newMaterials[i] = item;
+        const nl = [...props.data.materials!];
+        nl[i] = item;
         emits("change", {
           ...props.data,
-          materials: newMaterials,
+          materials: nl,
         });
       }
     };
@@ -97,10 +97,10 @@ const localMaterials = computed(() => {
 });
 
 const value = computed(() => {
-  return props.data.quantity * props.data.price;
+  return formatNumber(props.data.quantity * props.data.price);
 });
 const cost = computed(() => {
-  return calculateProductCost(props.data);
+  return formatNumber(calculateProductCost(props.data));
 });
 
 function onDelete() {
@@ -114,17 +114,20 @@ function onDelete() {
   border: solid 1px var(--el-border-color);
   border-radius: var(--el-border-radius-base);
 
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-
   .item {
-    width: 260px;
+    width: 220px;
 
     display: flex;
     flex-direction: column;
     align-items: stretch;
     gap: 5px;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
   }
 
   .isk {
@@ -134,15 +137,20 @@ function onDelete() {
   }
 
   .materials {
-    width: fit-content;
+    margin-top: 5px;
 
     .list {
       margin-top: 5px;
 
       display: flex;
       align-items: start;
+      flex-wrap: wrap;
       gap: 10px;
     }
   }
+}
+
+.manufacture-product+.manufacture-product {
+  margin-top: 10px;
 }
 </style>

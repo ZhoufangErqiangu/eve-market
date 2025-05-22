@@ -1,11 +1,13 @@
 <template>
   <div class="manufacture-item">
     <div class="item">
-      <div class="type">
-        {{ name }}
-      </div>
-      <div class="quantity">
-        {{ props.data.quantity }}
+      <div class="header">
+        <div class="type">
+          {{ name }}
+        </div>
+        <div class="quantity">
+          {{ props.data.quantity }}
+        </div>
       </div>
       <el-select v-model="localSource">
         <el-option v-for="o of sourceOptions" :key="o.value" :label="o.label" :value="o.value" />
@@ -19,7 +21,7 @@
         </div>
       </div>
     </div>
-    <div v-if="Boolean(props.data.materials)" class="materials">
+    <div v-if="showMaterials" class="materials">
       <div class="title">
         {{ $t("manufacture.item.materials") }}
       </div>
@@ -37,6 +39,7 @@ import { computed, type PropType } from "vue";
 import { useI18n } from "vue-i18n";
 import { type ManufactureItemType } from "..";
 import { useDataStore } from "../../../stores/data";
+import { formatNumber } from "../../../utils/math";
 
 const props = defineProps({
   data: {
@@ -91,8 +94,13 @@ const sourceOptions = computed(() => {
   }
 });
 
+const showMaterials = computed(() => {
+  if (props.data.source !== "manufacture") return false;
+  return Boolean(props.data.materials);
+});
+
 const value = computed(() => {
-  return props.data.quantity * props.data.price;
+  return formatNumber(props.data.quantity * props.data.price);
 });
 </script>
 
@@ -102,17 +110,20 @@ const value = computed(() => {
   border-radius: var(--el-border-radius-base);
   padding: 10px;
 
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-
   .item {
-    width: 260px;
+    width: 220px;
 
     display: flex;
     flex-direction: column;
     align-items: stretch;
     gap: 5px;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
   }
 
   .isk {
@@ -122,13 +133,14 @@ const value = computed(() => {
   }
 
   .materials {
-    width: fit-content;
+    margin-top: 5px;
 
     .list {
       margin-top: 5px;
 
       display: flex;
       align-items: start;
+      flex-wrap: wrap;
       gap: 10px;
     }
   }

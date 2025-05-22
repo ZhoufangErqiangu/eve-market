@@ -1,8 +1,6 @@
 <template>
   <div class="manufacture-products">
-    <div class="list">
-      <ManufactureProudct v-for="i of localList" :key="i.id" :data="i.item" @change="i.onChange" @delete="i.onDelete" />
-    </div>
+    <ManufactureProudct v-for="i of localList" :key="i.id" :data="i.item" @change="i.onChange" @delete="i.onDelete" />
   </div>
 </template>
 9
@@ -25,11 +23,9 @@ const localList = computed(() => {
       id: `${i.type}-${idx}`,
       item: i,
       onChange: (value: ManufactureProductType) => {
-        emits("update:modelValue", [
-          ...props.modelValue.slice(0, idx),
-          value,
-          ...props.modelValue.slice(idx + 1),
-        ]);
+        const nl = [...props.modelValue];
+        nl[idx] = value;
+        emits("update:modelValue", nl);
       },
       onDelete: () => {
         emits("update:modelValue", [
@@ -42,16 +38,4 @@ const localList = computed(() => {
 });
 </script>
 
-<style lang="less" scoped>
-.manufacture-products {
-  padding-bottom: 10px;
-  overflow-x: auto;
-
-  .list {
-    width: fit-content;
-    display: flex;
-    gap: 10px;
-    align-items: stretch;
-  }
-}
-</style>
+<style lang="less" scoped></style>

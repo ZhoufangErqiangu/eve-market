@@ -24,6 +24,10 @@ export function b2n(b: bigint, decimals: number | bigint): number {
   }
 }
 
-export function fixDecimals(n: number, decimals: number = 2): number {
-  return Math.round(n * Math.pow(10, decimals)) / Math.pow(10, decimals);
+export function formatNumber(n: number, decimals: number = 2): string {
+  return n.toLocaleString("en-US", {
+    style: "decimal",
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
+  });
 }
