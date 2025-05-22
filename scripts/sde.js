@@ -4,10 +4,7 @@ import { parse } from "yaml";
 
 function buildBluePrints() {
   // read yaml
-  const f = readFileSync(
-    join(process.cwd(), "src/assets/sde/fsd/blueprints.yaml"),
-    "utf8",
-  );
+  const f = readFileSync(join(process.cwd(), "data/blueprints.yaml"), "utf8");
   const data = parse(f);
 
   // build data
@@ -33,7 +30,7 @@ function buildBluePrints() {
 
   // save to json
   writeFileSync(
-    join(process.cwd(), "src/assets/json/sde-blueprints.json"),
+    join(process.cwd(), "public/sde-blueprints.json"),
     JSON.stringify(bps, null, 2),
     "utf8",
   );
@@ -41,10 +38,7 @@ function buildBluePrints() {
 
 function buildMarketGroups() {
   // read yaml
-  const f = readFileSync(
-    join(process.cwd(), "src/assets/sde/fsd/marketGroups.yaml"),
-    "utf8",
-  );
+  const f = readFileSync(join(process.cwd(), "data/marketGroups.yaml"), "utf8");
   const data = parse(f);
 
   // build data
@@ -61,7 +55,7 @@ function buildMarketGroups() {
 
   // save to json
   writeFileSync(
-    join(process.cwd(), "src/assets/json/sde-marketgroups.json"),
+    join(process.cwd(), "public/sde-marketgroups.json"),
     JSON.stringify(mg, null, 2),
     "utf8",
   );
@@ -69,10 +63,7 @@ function buildMarketGroups() {
 
 function buildTypes() {
   // read yaml
-  const f = readFileSync(
-    join(process.cwd(), "src/assets/sde/fsd/types.yaml"),
-    "utf8",
-  );
+  const f = readFileSync(join(process.cwd(), "data/types.yaml"), "utf8");
   const data = parse(f);
 
   // build data
@@ -92,7 +83,7 @@ function buildTypes() {
 
   // save to json
   writeFileSync(
-    join(process.cwd(), "src/assets/json/sde-types.json"),
+    join(process.cwd(), "public/sde-types.json"),
     JSON.stringify(tts, null, 2),
     "utf8",
   );
