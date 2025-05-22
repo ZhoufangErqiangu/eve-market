@@ -30,7 +30,7 @@ function buildBluePrints() {
 
   // save to json
   writeFileSync(
-    join(process.cwd(), "public/sde-blueprints.json"),
+    join(process.cwd(), "public/json/sde-blueprints.json"),
     JSON.stringify(bps, null, 2),
     "utf8",
   );
@@ -55,7 +55,7 @@ function buildMarketGroups() {
 
   // save to json
   writeFileSync(
-    join(process.cwd(), "public/sde-marketgroups.json"),
+    join(process.cwd(), "public/json/sde-marketgroups.json"),
     JSON.stringify(mg, null, 2),
     "utf8",
   );
@@ -83,8 +83,33 @@ function buildTypes() {
 
   // save to json
   writeFileSync(
-    join(process.cwd(), "public/sde-types.json"),
+    join(process.cwd(), "public/json/sde-types.json"),
     JSON.stringify(tts, null, 2),
+    "utf8",
+  );
+}
+
+function buildPlanetSchematics() {
+  // read yaml
+  const f = readFileSync(
+    join(process.cwd(), "data/planetSchematics.yaml"),
+    "utf8",
+  );
+  const data = parse(f);
+
+  // build data
+  const pss = {};
+  for (const key in data) {
+    const ps = data[key];
+    pss[key] = {
+      cycleTime: ps.cycleTime,
+      types: ps.types,
+    };
+  }
+
+  writeFileSync(
+    join(process.cwd(), "public/json/sde-planetschematics.json"),
+    JSON.stringify(pss, null, 2),
     "utf8",
   );
 }
@@ -98,6 +123,8 @@ function main() {
     console.log("market groups done");
     buildTypes();
     console.log("types done");
+    buildPlanetSchematics();
+    console.log("planet schematics done");
     console.log("build sde done");
   } catch (err) {
     console.error("build sde error", err);
