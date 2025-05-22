@@ -19,7 +19,7 @@
 import { ElContainer, ElHeader, ElMain, ElMessage } from "element-plus";
 import "element-plus/es/components/container/style/css";
 import { ref, watch } from "vue";
-import { type ManufactureProductType } from ".";
+import { type ManufactureProductType, buildInitProduct } from ".";
 import ManufactureProducts from "./product/ManufactureProducts.vue";
 import { loadManufactureLastRecipeKey, loadManufactureRecipe, loadManufactureRecipes, removeManufactureRecipe, saveManufactureRecipe } from "./recipe";
 import ManufactureRecipeComponent from "./recipe/ManufactureRecipe.vue";
@@ -27,9 +27,7 @@ import ManufactureRecipeComponent from "./recipe/ManufactureRecipe.vue";
 const recipe = ref<string | undefined>(loadManufactureLastRecipeKey());
 const recipeOptions = ref<Array<{ label: string, value: string }>>(loadManufactureRecipes());
 
-const products = ref<Array<ManufactureProductType>>([{
-  quantity: 1,
-}]);
+const products = ref<Array<ManufactureProductType>>([buildInitProduct()]);
 
 function onLoad(key: string) {
   const r = loadManufactureRecipe(key);
@@ -50,7 +48,7 @@ function onCancel() {
   onLoad(recipe.value);
 }
 function onDelete() {
-  products.value = [{ quantity: 1 }];
+  products.value = [buildInitProduct()];
 
   if (!recipe.value) return;
   removeManufactureRecipe(recipe.value);

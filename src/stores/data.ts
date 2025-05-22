@@ -225,6 +225,10 @@ export const useDataStore = defineStore("data", () => {
     }
   }
   initMarketPrices();
+  function readMarketPrice(type: number): number {
+    const mp = marketPrices.value[type];
+    return mp?.avg ?? mp?.adj ?? 0.0;
+  }
 
   // market orders
   async function readMarketOrders(
@@ -298,6 +302,7 @@ export const useDataStore = defineStore("data", () => {
     marketGroups,
     readMarketGroup,
     marketPrices,
+    readMarketPrice,
     readMarketOrders,
     readMarketHistory,
     // type

@@ -23,3 +23,7 @@ export function b2n(b: bigint, decimals: number | bigint): number {
     );
   }
 }
+
+export function fixDecimals(n: number, decimals: number = 2): number {
+  return Math.round(n * Math.pow(10, decimals)) / Math.pow(10, decimals);
+}

@@ -41,6 +41,12 @@
   "manufacture.save": "保存",
   "manufacture.cancel": "取消",
   "manufacture.delete": "删除",
-  "manufacture.products.title": "产出",
-  "manufacture.items.title": "物品"
+  "manufacture.item.source.manufacture": "制造",
+  "manufacture.item.source.purchase": "购买",
+  "manufacture.item.source.original": "采集",
+  "manufacture.product.value": "价值",
+  "manufacture.product.cost": "花费",
+  "manufacture.product.materials": "原料",
+  "manufacture.item.value": "价值",
+  "manufacture.item.materials": "原料"
 }

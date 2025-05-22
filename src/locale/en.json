@@ -45,6 +45,9 @@
   "manufacture.save": "Save",
   "manufacture.cancel": "Cancel",
   "manufacture.delete": "Delete",
-  "manufacture.products.title": "Products",
-  "manufacture.items.title": "Items"
+  "manufacture.product.value": "Value",
+  "manufacture.product.cost": "Cost",
+  "manufacture.product.materials": "Materials",
+  "manufacture.item.value": "Value",
+  "manufacture.item.materials": "Materials"
 }
