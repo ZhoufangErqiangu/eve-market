@@ -61,7 +61,11 @@ const localType = computed<number[] | undefined>({
     if (!value) {
       emits("change", { ...props.data, type: undefined, maketType: undefined });
     } else {
-      emits("change", buildNewProduct(value, props.data.quantity, dataStroe.readBlueprintByProduct, dataStroe.readMarketPrice));
+      emits("change", buildNewProduct(value, props.data.quantity, (type: number) => {
+        return dataStroe.blueprints[type];
+      }, (type: number) => {
+        return dataStroe.marketPrices[type]?.avg ?? dataStroe.marketPrices[type]?.adj ?? 0;
+      }));
     }
   },
 });
@@ -69,7 +73,11 @@ const localQuantity = computed({
   get: () => props.data.quantity,
   set: (value) => {
     if (props.data.marketType) {
-      emits("change", buildNewProduct(props.data.marketType, value, dataStroe.readBlueprintByProduct, dataStroe.readMarketPrice));
+      emits("change", buildNewProduct(props.data.marketType, value, (type: number) => {
+        return dataStroe.blueprints[type];
+      }, (type: number) => {
+        return dataStroe.marketPrices[type]?.avg ?? dataStroe.marketPrices[type]?.adj ?? 0;
+      }));
     } else {
       emits("change", {
         ...props.data,

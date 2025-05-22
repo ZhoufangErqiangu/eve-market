@@ -54,7 +54,7 @@ const dataStroe = useDataStore();
 
 const name = computed(() => {
   if (!props.data.type) return t("Unknown");
-  return dataStroe.readTypeName(props.data.type.toString());
+  return dataStroe.types[props.data.type.toString()] || t("Unknown");
 });
 
 const localSource = computed({

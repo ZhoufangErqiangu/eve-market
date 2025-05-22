@@ -1,26 +1,17 @@
+import type { CascaderOption } from "element-plus";
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { MarketApi } from "../apis/esi";
-import SdeBlueprintJson from "../assets/json/sde-blueprints.json";
-import SdeMarketGroupsJson from "../assets/json/sde-marketgroups.json";
-import SdeTypesJson from "../assets/json/sde-types.json";
+import {
+  getSdeBlueprints,
+  getSdeMarketGroups,
+  getSdeTypes,
+  type SdeMarketGroup,
+} from "../apis/sde";
 
 export interface Region {
   id: number;
   name: string;
-}
-
-interface SdeMarketGroup {
-  id: string;
-  name: string;
-  hasTypes: boolean;
-  parentGroupID?: number;
-}
-
-interface SdeType {
-  id: string;
-  name?: string;
-  marketGroupID?: number;
 }
 
 export interface MarketType {
@@ -33,31 +24,6 @@ export interface MarketGroup {
   name: string;
   children: Array<MarketGroup>;
   types: Array<MarketType>;
-}
-
-/**
- * build market groups from SDE
- * @returns market groups
- */
-function buildMarketGroups(): Array<MarketGroup> {
-  const ss = Object.values(SdeMarketGroupsJson) as Array<SdeMarketGroup>;
-  const tt = Object.values(SdeTypesJson) as Array<SdeType>;
-
-  const bmg: (sde: SdeMarketGroup) => MarketGroup = (sde: SdeMarketGroup) => {
-    const id = parseInt(sde.id);
-    return {
-      id: id,
-      name: sde.name,
-      children: ss.filter((g) => g.parentGroupID === id).map((g) => bmg(g)),
-      types: sde.hasTypes
-        ? tt
-            .filter((t) => t.marketGroupID === id)
-            .map((t) => ({ id: parseInt(t.id), name: t.name ?? "" }))
-        : [],
-    };
-  };
-
-  return ss.filter((g) => !g.parentGroupID).map((g) => bmg(g));
 }
 
 export interface MarketPrice {
@@ -87,18 +53,6 @@ export interface MarketHistory {
   volume: number;
 }
 
-interface SdeBlueprint {
-  id: string;
-  blueprintTypeID: number;
-  activities: {
-    manufacturing: {
-      materials?: Array<{ quantity: number; typeID: number }>;
-      products?: Array<{ quantity: number; typeID: number }>;
-      time: number;
-    };
-  };
-}
-
 export interface ManufactureBlueprintMaterial {
   type: number;
   quantity: number;
@@ -112,56 +66,16 @@ export interface ManufactureBlueprint {
   time: number;
 }
 
-function buildManufactureBlueprints(): [
-  Record<number, ManufactureBlueprint>,
-  Record<number, ManufactureBlueprint>,
-] {
-  const byType: Record<number, ManufactureBlueprint> = {};
-  const byProduct: Record<number, ManufactureBlueprint> = {};
-
-  for (const b of Object.values(SdeBlueprintJson) as SdeBlueprint[]) {
-    // skip null products
-    if (!b.activities?.manufacturing?.products) continue;
-
-    if (b.activities.manufacturing.products.length > 1) {
-      console.warn(`Blueprint ${b.id} has multiple products`);
-    }
-
-    const p = b.activities.manufacturing.products[0];
-    if (!p) continue;
-    const rr: ManufactureBlueprint = {
-      type: b.blueprintTypeID,
-      materials: b.activities.manufacturing.materials?.map((m) => ({
-        type: m.typeID,
-        quantity: m.quantity,
-      })),
-      product: p.typeID,
-      quantity: p.quantity,
-      time: b.activities.manufacturing.time,
-    };
-    byType[b.blueprintTypeID] = rr;
-    byProduct[p.typeID] = rr;
-  }
-
-  return [byType, byProduct];
-}
-
-interface BlueprintOption {
-  label: string;
-  value: number;
-  children?: Array<BlueprintOption>;
-}
-
 /**
  * blueprint options for select, value is blueprint type id
  */
 function buildBlueprintOptions(
   blueprints: Record<number, ManufactureBlueprint>,
   marketGroups: MarketGroup[],
-): Array<BlueprintOption> {
-  const res: Array<BlueprintOption> = [];
+): Array<CascaderOption> {
+  const res: Array<CascaderOption> = [];
   for (const g of marketGroups) {
-    let cc: Array<BlueprintOption> = [];
+    let cc: Array<CascaderOption> = [];
 
     // add children
     if (g.children.length > 0) {
@@ -195,8 +109,44 @@ function buildBlueprintOptions(
 export const useDataStore = defineStore("data", () => {
   const m = new MarketApi();
 
+  // type
+  const types = ref<Record<string, string>>({});
+
   // market group
-  const marketGroups = buildMarketGroups();
+  const marketGroups = ref<Array<MarketGroup>>([]);
+  async function initMarketGroups() {
+    // init types
+    const sts = await getSdeTypes();
+    types.value = sts.reduce(
+      (prev, curr) => {
+        prev[curr.id] = curr.name ?? "Unknown";
+        return prev;
+      },
+      {} as Record<string, string>,
+    );
+
+    // init market groups
+    const smgs = await getSdeMarketGroups();
+    const bmg: (sde: SdeMarketGroup) => MarketGroup = (sde: SdeMarketGroup) => {
+      const id = parseInt(sde.id);
+      return {
+        id: id,
+        name: sde.name,
+        children: smgs.filter((g) => g.parentGroupID === id).map((g) => bmg(g)),
+        types: sde.hasTypes
+          ? sts
+              .filter((t) => t.marketGroupID === id)
+              .map((t) => ({ id: parseInt(t.id), name: t.name ?? "Unknown" }))
+          : [],
+      };
+    };
+    marketGroups.value = smgs
+      .filter((g) => !g.parentGroupID)
+      .map((g) => bmg(g));
+  }
+  initMarketGroups().catch((err) => {
+    console.error("Init market groups error", err);
+  });
   function readMarketGroup(id: number) {
     const fmg: (groups: MarketGroup[]) => MarketGroup | undefined = (
       groups,
@@ -209,10 +159,10 @@ export const useDataStore = defineStore("data", () => {
       return undefined;
     };
 
-    return fmg(marketGroups);
+    return fmg(marketGroups.value);
   }
 
-  // market prices
+  // market prices, key is type id
   const marketPrices = ref<Record<number, MarketPrice>>({});
   async function initMarketPrices() {
     const ps = await m.getMarketsPrices();
@@ -224,11 +174,9 @@ export const useDataStore = defineStore("data", () => {
       };
     }
   }
-  initMarketPrices();
-  function readMarketPrice(type: number): number {
-    const mp = marketPrices.value[type];
-    return mp?.avg ?? mp?.adj ?? 0.0;
-  }
+  initMarketPrices().catch((err) => {
+    console.error("Init market prices error", err);
+  });
 
   // market orders
   async function readMarketOrders(
@@ -277,39 +225,55 @@ export const useDataStore = defineStore("data", () => {
     });
   }
 
-  // type
-  function readTypeName(id: string): string | undefined {
-    return (SdeTypesJson as Record<string, SdeType>)[id]?.name;
-  }
+  // blueprint, key is product type id
+  const blueprints = ref<Record<number, ManufactureBlueprint>>({});
+  async function initBlueprints() {
+    const sbs = await getSdeBlueprints();
+    blueprints.value = sbs.reduce(
+      (prev, curr) => {
+        // skip null products
+        if (!curr.activities?.manufacturing?.products) return prev;
 
-  // blueprint
-  const [blueprints, blueprintsByProduct] = buildManufactureBlueprints();
-  function readBlueprint(type: number): ManufactureBlueprint | undefined {
-    return blueprints[type];
+        if (curr.activities.manufacturing.products.length > 1) {
+          console.warn(`Blueprint ${curr.id} has multiple products`);
+        }
+
+        const p = curr.activities.manufacturing.products[0];
+        if (!p) return prev;
+        const rr: ManufactureBlueprint = {
+          type: curr.blueprintTypeID,
+          materials: curr.activities.manufacturing.materials?.map((m) => ({
+            type: m.typeID,
+            quantity: m.quantity,
+          })),
+          product: p.typeID,
+          quantity: p.quantity,
+          time: curr.activities.manufacturing.time,
+        };
+        prev[p.typeID] = rr;
+        return prev;
+      },
+      {} as Record<number, ManufactureBlueprint>,
+    );
   }
-  function readBlueprintByProduct(
-    product: number,
-  ): ManufactureBlueprint | undefined {
-    return blueprintsByProduct[product];
-  }
-  const blueprintOptions = buildBlueprintOptions(
-    blueprintsByProduct,
-    marketGroups,
-  );
+  initBlueprints().catch((err) => {
+    console.error("Init blueprints error", err);
+  });
+  const blueprintOptions = computed(() => {
+    return buildBlueprintOptions(blueprints.value, marketGroups.value);
+  });
 
   return {
+    // type
+    types,
     // market
     marketGroups,
     readMarketGroup,
     marketPrices,
-    readMarketPrice,
     readMarketOrders,
     readMarketHistory,
-    // type
-    readTypeName,
     // blueprint
-    readBlueprint,
-    readBlueprintByProduct,
+    blueprints,
     blueprintOptions,
   };
 });
