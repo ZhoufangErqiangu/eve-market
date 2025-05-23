@@ -1,5 +1,5 @@
 <template>
-  <div class="manufacture-item">
+  <div class="manufacture-item" :class="recusionClass">
     <el-space class="item">
       <div class="type">
         <div class="name">
@@ -124,13 +124,31 @@ const value = computed(() => {
 const cost = computed(() => {
   return formatNumber(calculateItemCost(props.data));
 });
+
+const recusionClass = computed(() => {
+  return [`recursion-${props.data.recursion % 3}`];
+});
 </script>
 
 <style lang="less" scoped>
 .manufacture-item {
   padding: 10px;
-  border: solid 1px var(--el-border-color);
+
+  border: solid 1px var(--border-color);
   border-radius: var(--el-border-radius-base);
+  --border-color: var(var(--el-border-color));
+
+  &.recursion-0 {
+    --border-color: #ffd700;
+  }
+
+  &.recursion-1 {
+    --border-color: #da70d6;
+  }
+
+  &.recursion-2 {
+    --border-color: #179fff;
+  }
 
   .type {
     width: 220px;

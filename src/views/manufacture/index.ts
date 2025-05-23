@@ -53,6 +53,7 @@ export function buildNewProduct(
     output: b.quantity,
     materials: b.materials?.map((m) =>
       buildNewItem(
+        0,
         m.type,
         cycles * m.quantity,
         readBlueprint,
@@ -73,6 +74,7 @@ export function calculateProductCost(product: ManufactureProductType): number {
 }
 
 export interface ManufactureItemType {
+  recursion: number;
   type?: number;
   quantity: number;
   source: ManufactureItemSource;
@@ -93,6 +95,7 @@ export interface ManufactureItemType {
 }
 
 export function buildNewItem(
+  recursion: number,
   type: number,
   quantity: number,
   readBlueprint: (product: number) => Blueprint | undefined,
@@ -107,6 +110,7 @@ export function buildNewItem(
     const cycles = Math.ceil(quantity / b.quantity);
 
     return {
+      recursion: recursion,
       type: type,
       quantity: quantity,
       source: "manufacture",
@@ -115,6 +119,7 @@ export function buildNewItem(
       output: b.quantity,
       materials: b.materials?.map((m) =>
         buildNewItem(
+          recursion + 1,
           m.type,
           cycles * m.quantity,
           readBlueprint,
@@ -130,6 +135,7 @@ export function buildNewItem(
     const cycles = Math.ceil(quantity / ps.quantity);
 
     return {
+      recursion: recursion,
       type: type,
       quantity: quantity,
       source: "manufacture",
@@ -138,6 +144,7 @@ export function buildNewItem(
       output: ps.quantity,
       materials: ps.materials?.map((m) =>
         buildNewItem(
+          recursion + 1,
           m.type,
           cycles * m.quantity,
           readBlueprint,
@@ -151,6 +158,7 @@ export function buildNewItem(
     };
   } else {
     return {
+      recursion: recursion,
       type: type,
       quantity: quantity,
       source: "purchase",
