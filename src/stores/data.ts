@@ -8,6 +8,7 @@ import {
   getSdeTypes,
   type SdeMarketGroup,
 } from "../apis/sde";
+import { getSdePlanetSchematics } from "../apis/sde/planet";
 
 export interface Region {
   id: number;
@@ -60,6 +61,13 @@ export interface BlueprintMaterial {
 
 export interface Blueprint {
   type: number;
+  materials?: Array<BlueprintMaterial>;
+  product: number;
+  quantity: number;
+  time: number;
+}
+
+export interface PlanetSchematic {
   materials?: Array<BlueprintMaterial>;
   product: number;
   quantity: number;
@@ -263,6 +271,47 @@ export const useDataStore = defineStore("data", () => {
     return buildBlueprintOptions(blueprints.value, marketGroups.value);
   });
 
+  // planet
+  const planetSchematics = ref<Record<number, PlanetSchematic>>({});
+  async function initPlanetSchematics() {
+    const spss = await getSdePlanetSchematics();
+    planetSchematics.value = spss.reduce(
+      (prev, curr) => {
+        const rr: PlanetSchematic = {
+          materials: [],
+          product: 0,
+          quantity: 0,
+          time: curr.cycleTime,
+        };
+        for (const ts in curr.types) {
+          const t = curr.types[ts];
+          if (!t) continue;
+
+          if (t.isInput) {
+            rr.materials!.push({
+              type: parseInt(ts),
+              quantity: t.quantity,
+            });
+          } else {
+            rr.product = parseInt(ts);
+            rr.quantity = t.quantity;
+          }
+        }
+        prev[rr.product] = rr;
+        return prev;
+      },
+      {} as Record<number, PlanetSchematic>,
+    );
+  }
+  initPlanetSchematics().catch((err) => {
+    console.error("Init planet schematics error", err);
+  });
+  function readPlanetSchematic(type: number): PlanetSchematic | undefined {
+    return planetSchematics.value[type];
+  }
+
+  // todo, Reactions
+
   return {
     // type
     types,
@@ -275,5 +324,8 @@ export const useDataStore = defineStore("data", () => {
     // blueprint
     blueprints,
     blueprintOptions,
+    // planet
+    planetSchematics,
+    readPlanetSchematic,
   };
 });

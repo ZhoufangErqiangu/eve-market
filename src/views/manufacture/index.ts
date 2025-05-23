@@ -1,4 +1,4 @@
-import { type Blueprint } from "../../stores/data";
+import { type Blueprint, type PlanetSchematic } from "../../stores/data";
 
 export type ManufactureItemSource = "manufacture" | "purchase" | "original";
 
@@ -33,6 +33,7 @@ export function buildNewProduct(
   maketType: number[],
   quantity: number,
   readBlueprint: (product: number) => Blueprint | undefined,
+  readPlanetSchematic: (product: number) => PlanetSchematic | undefined,
   readPrice: (type: number) => number,
 ): ManufactureProductType {
   const type = maketType[maketType.length - 1];
@@ -51,7 +52,13 @@ export function buildNewProduct(
     blueprintId: b.type,
     output: b.quantity,
     materials: b.materials?.map((m) =>
-      buildNewItem(m.type, cycles * m.quantity, readBlueprint, readPrice),
+      buildNewItem(
+        m.type,
+        cycles * m.quantity,
+        readBlueprint,
+        readPlanetSchematic,
+        readPrice,
+      ),
     ),
     time: cycles * b.time,
 
@@ -82,6 +89,7 @@ export interface ManufactureItemType {
    * manufacturing
    */
   blueprintId?: number;
+  isPlanetSchematic?: boolean;
   output?: number;
   materials?: ManufactureItemType[];
   time?: number;
@@ -96,20 +104,14 @@ export function buildNewItem(
   type: number,
   quantity: number,
   readBlueprint: (product: number) => Blueprint | undefined,
+  readPlanetSchematic: (product: number) => PlanetSchematic | undefined,
   readPrice: (type: number) => number,
 ): ManufactureItemType {
   const b = readBlueprint(type);
+  const ps = readPlanetSchematic(type);
   const p = readPrice(type);
 
-  if (!b) {
-    return {
-      type: type,
-      quantity: quantity,
-      source: "purchase",
-
-      price: p,
-    };
-  } else {
+  if (b) {
     const cycles = Math.ceil(quantity / b.quantity);
 
     return {
@@ -120,9 +122,46 @@ export function buildNewItem(
       blueprintId: b.type,
       output: b.quantity,
       materials: b.materials?.map((m) =>
-        buildNewItem(m.type, cycles * m.quantity, readBlueprint, readPrice),
+        buildNewItem(
+          m.type,
+          cycles * m.quantity,
+          readBlueprint,
+          readPlanetSchematic,
+          readPrice,
+        ),
       ),
       time: cycles * b.time,
+
+      price: p,
+    };
+  } else if (ps) {
+    const cycles = Math.ceil(quantity / ps.quantity);
+
+    return {
+      type: type,
+      quantity: quantity,
+      source: "manufacture",
+
+      isPlanetSchematic: true,
+      output: ps.quantity,
+      materials: ps.materials?.map((m) =>
+        buildNewItem(
+          m.type,
+          cycles * m.quantity,
+          readBlueprint,
+          readPlanetSchematic,
+          readPrice,
+        ),
+      ),
+      time: cycles * ps.time,
+
+      price: p,
+    };
+  } else {
+    return {
+      type: type,
+      quantity: quantity,
+      source: "purchase",
 
       price: p,
     };
