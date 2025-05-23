@@ -26,9 +26,11 @@ export function loadManufactureRecipes(): Array<{
   return rs
     .map((r) => ({
       label: r,
-      value: buildManufactureRecipeKey(r),
+      value: r,
     }))
-    .filter((r) => localStorage.getItem(r.value) !== null);
+    .filter(
+      (r) => localStorage.getItem(buildManufactureRecipeKey(r.value)) !== null,
+    );
 }
 
 /**
@@ -42,12 +44,13 @@ export function loadManufactureLastRecipeKey(): string | undefined {
 /**
  * load manufacture recipe from local storage
  */
-export function loadManufactureRecipe(key: string): ManufactureRecipe | null {
+export function loadManufactureRecipe(name: string): ManufactureRecipe | null {
+  const key = buildManufactureRecipeKey(name);
   const rs = localStorage.getItem(key);
   if (!rs) return null;
 
   // save last recipe key
-  localStorage.setItem(MANUFACTURE_LAST_RECIPE_KEY, key);
+  localStorage.setItem(MANUFACTURE_LAST_RECIPE_KEY, name);
 
   return JSON.parse(rs);
 }
@@ -59,7 +62,7 @@ export function saveManufactureRecipe(recipe: ManufactureRecipe): void {
   localStorage.setItem(key, JSON.stringify(recipe));
 
   // save last recipe key
-  localStorage.setItem(MANUFACTURE_LAST_RECIPE_KEY, key);
+  localStorage.setItem(MANUFACTURE_LAST_RECIPE_KEY, recipe.name);
 
   // save recipes
   const rs: string[] = JSON.parse(
@@ -82,7 +85,7 @@ export function removeManufactureRecipe(key: string): void {
   const rs: string[] = JSON.parse(
     localStorage.getItem(MANUFACTURE_RECIPES_KEY) ?? "[]",
   );
-  const index = rs.findIndex((r) => buildManufactureRecipeKey(r) === key);
+  const index = rs.findIndex((r) => r === key);
   if (index > -1) {
     rs.splice(index, 1);
     localStorage.setItem(MANUFACTURE_RECIPES_KEY, JSON.stringify(rs));
