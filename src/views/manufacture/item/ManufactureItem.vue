@@ -20,6 +20,14 @@
           {{ value }}
         </div>
       </div>
+      <div class="isk">
+        <div class="text1">
+          {{ $t("manufacture.item.cost") }}
+        </div>
+        <div class="text2">
+          {{ cost }}
+        </div>
+      </div>
     </div>
     <div v-if="showMaterials" class="materials">
       <div class="title">
@@ -37,7 +45,7 @@ import { ElOption, ElSelect } from "element-plus";
 import "element-plus/es/components/select/style/css";
 import { computed, type PropType } from "vue";
 import { useI18n } from "vue-i18n";
-import { type ManufactureItemType } from "..";
+import { calculateCost, type ManufactureItemType } from "..";
 import { useDataStore } from "../../../stores/data";
 import { formatNumber } from "../../../utils/math";
 
@@ -119,6 +127,9 @@ const localMaterials = computed(() => {
 
 const value = computed(() => {
   return formatNumber(props.data.quantity * props.data.price);
+});
+const cost = computed(() => {
+  return formatNumber(calculateCost(props.data));
 });
 </script>
 
