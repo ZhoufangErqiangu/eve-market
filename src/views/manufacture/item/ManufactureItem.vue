@@ -1,17 +1,15 @@
 <template>
   <div class="manufacture-item">
-    <div class="item">
-      <div class="header">
-        <div class="type">
+    <el-space class="item">
+      <div class="type">
+        <div class="name">
           {{ name }}
         </div>
         <div class="quantity">
           {{ props.data.quantity }}
         </div>
       </div>
-      <el-select v-model="localSource">
-        <el-option v-for="o of sourceOptions" :key="o.value" :label="o.label" :value="o.value" />
-      </el-select>
+      <el-divider direction="vertical" />
       <div class="isk">
         <div class="text1">
           {{ $t("manufacture.item.value") }}
@@ -20,6 +18,7 @@
           {{ value }}
         </div>
       </div>
+      <el-divider direction="vertical" />
       <div class="isk">
         <div class="text1">
           {{ $t("manufacture.item.cost") }}
@@ -28,21 +27,22 @@
           {{ cost }}
         </div>
       </div>
-    </div>
+      <el-divider direction="vertical" />
+      <el-select v-model="localSource" class="source">
+        <el-option v-for="o of sourceOptions" :key="o.value" :label="o.label" :value="o.value" />
+      </el-select>
+    </el-space>
     <div v-if="showMaterials" class="materials">
-      <div class="title">
-        {{ $t("manufacture.item.materials") }}
-      </div>
-      <div class="list">
-        <ManufactureItem v-for="m of localMaterials" :key="m.data.type" :data="m.data" @change="m.onChange" />
-      </div>
+      <ManufactureItem v-for="m of localMaterials" :key="m.data.type" :data="m.data" @change="m.onChange" />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ElOption, ElSelect } from "element-plus";
+import { ElDivider, ElOption, ElSelect, ElSpace } from "element-plus";
+import "element-plus/es/components/divider/style/css";
 import "element-plus/es/components/select/style/css";
+import "element-plus/es/components/space/style/css";
 import { computed, type PropType } from "vue";
 import { useI18n } from "vue-i18n";
 import { calculateItemCost, type ManufactureItemType } from "..";
@@ -70,13 +70,6 @@ const localSource = computed({
   set: (val) => {
     // skip same value
     if (val === props.data.source) return;
-
-    if (val === "manufacture") {
-      emits("change", {
-        ...props.data,
-        source: val,
-      });
-    }
     emits("change", { ...props.data, source: val });
   },
 });
@@ -135,43 +128,34 @@ const cost = computed(() => {
 
 <style lang="less" scoped>
 .manufacture-item {
+  padding: 10px;
   border: solid 1px var(--el-border-color);
   border-radius: var(--el-border-radius-base);
-  padding: 10px;
 
-  .item {
+  .type {
     width: 220px;
 
     display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 5px;
+    justify-content: space-between;
   }
 
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
+  .source {
+    width: 150px;
   }
 
   .isk {
+    width: 200px;
+
     display: flex;
     justify-content: space-between;
-    align-items: center;
   }
 
   .materials {
     margin-top: 5px;
-
-    .list {
-      margin-top: 5px;
-
-      display: flex;
-      align-items: start;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
   }
+}
+
+.manufacture-item+.manufacture-item {
+  margin-top: 10px;
 }
 </style>

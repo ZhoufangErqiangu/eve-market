@@ -1,12 +1,11 @@
 <template>
   <div class="manufacture-product">
-    <div class="item">
-      <div class="header">
-        <el-cascader v-model="localType" :options="dataStroe.blueprintOptions" :show-all-levels="false" />
-        <el-button size="small" :icon="Close" type="danger" @click="onDelete" />
-      </div>
+    <el-space class="item">
+      <el-cascader v-model="localType" class="type" :options="dataStroe.blueprintOptions" :show-all-levels="false" />
+      <el-divider direction="vertical" />
       <!-- there is a issue on quanity. will build a new product when change quantity, this causes all items be set to new. -->
-      <el-input-number v-model="localQuantity" :disabled="true" :min="1" :step="1" />
+      <el-input-number v-model="localQuantity" class="quantity" :disabled="true" :min="1" :step="1" />
+      <el-divider direction="vertical" />
       <div class="isk">
         <div class="text1">
           {{ $t("manufacture.product.value") }}
@@ -15,6 +14,7 @@
           {{ value }}
         </div>
       </div>
+      <el-divider direction="vertical" />
       <div class="isk">
         <div class="text1">
           {{ $t("manufacture.product.cost") }}
@@ -23,23 +23,22 @@
           {{ cost }}
         </div>
       </div>
-    </div>
+      <el-divider direction="vertical" />
+      <el-button :icon="Close" type="danger" @click="onDelete" />
+    </el-space>
     <div v-if="Boolean(localMaterials)" class="materials">
-      <div class="title">
-        {{ $t("manufacture.product.materials") }}
-      </div>
-      <div class="list">
-        <ManufactureItem v-for="m of localMaterials" :key="m.data.type" :data="m.data" @change="m.onChange" />
-      </div>
+      <ManufactureItem v-for="m of localMaterials" :key="m.data.type" :data="m.data" @change="m.onChange" />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { Close } from "@element-plus/icons-vue";
-import { ElButton, ElCascader, ElInputNumber } from "element-plus";
+import { ElButton, ElCascader, ElDivider, ElInputNumber, ElSpace } from "element-plus";
 import "element-plus/es/components/cascader/style/css";
+import "element-plus/es/components/divider/style/css";
 import "element-plus/es/components/input-number/style/css";
+import "element-plus/es/components/space/style/css";
 import { computed, type PropType } from "vue";
 import { buildNewProduct, calculateProductCost, type ManufactureItemType, type ManufactureProductType } from "../";
 import { useDataStore } from "../../../stores/data";
@@ -127,39 +126,19 @@ function onDelete() {
   border: solid 1px var(--el-border-color);
   border-radius: var(--el-border-radius-base);
 
-  .item {
+  .type {
     width: 220px;
-
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 5px;
-  }
-
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
   }
 
   .isk {
+    width: 200px;
+
     display: flex;
     justify-content: space-between;
-    align-items: center;
   }
 
   .materials {
     margin-top: 5px;
-
-    .list {
-      margin-top: 5px;
-
-      display: flex;
-      align-items: start;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
   }
 }
 
