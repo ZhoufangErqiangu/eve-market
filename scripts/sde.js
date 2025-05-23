@@ -12,20 +12,33 @@ function buildBluePrints() {
   for (const key in data) {
     const dd = data[key];
 
-    // skip null manufacturing
-    if (!dd.activities.manufacturing) continue;
-
-    bps[key] = {
-      id: key,
-      blueprintTypeID: dd.blueprintTypeID,
-      activities: {
-        manufacturing: {
-          materials: dd.activities.manufacturing.materials,
-          products: dd.activities.manufacturing.products,
-          time: dd.activities.manufacturing.time,
+    if (dd.activities.manufacturing) {
+      // set manufacturing
+      bps[key] = {
+        id: key,
+        blueprintTypeID: dd.blueprintTypeID,
+        activities: {
+          manufacturing: {
+            materials: dd.activities.manufacturing.materials,
+            products: dd.activities.manufacturing.products,
+            time: dd.activities.manufacturing.time,
+          },
         },
-      },
-    };
+      };
+    } else if (dd.activities.reaction) {
+      // set reaction
+      bps[key] = {
+        id: key,
+        blueprintTypeID: dd.blueprintTypeID,
+        activities: {
+          reaction: {
+            materials: dd.activities.reaction.materials,
+            products: dd.activities.reaction.products,
+            time: dd.activities.reaction.time,
+          },
+        },
+      };
+    }
   }
 
   // save to json
