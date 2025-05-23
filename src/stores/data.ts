@@ -53,14 +53,14 @@ export interface MarketHistory {
   volume: number;
 }
 
-export interface ManufactureBlueprintMaterial {
+export interface BlueprintMaterial {
   type: number;
   quantity: number;
 }
 
-export interface ManufactureBlueprint {
+export interface Blueprint {
   type: number;
-  materials?: Array<ManufactureBlueprintMaterial>;
+  materials?: Array<BlueprintMaterial>;
   product: number;
   quantity: number;
   time: number;
@@ -70,7 +70,7 @@ export interface ManufactureBlueprint {
  * blueprint options for select, value is blueprint type id
  */
 function buildBlueprintOptions(
-  blueprints: Record<number, ManufactureBlueprint>,
+  blueprints: Record<number, Blueprint>,
   marketGroups: MarketGroup[],
 ): Array<CascaderOption> {
   const res: Array<CascaderOption> = [];
@@ -226,7 +226,7 @@ export const useDataStore = defineStore("data", () => {
   }
 
   // blueprint, key is product type id
-  const blueprints = ref<Record<number, ManufactureBlueprint>>({});
+  const blueprints = ref<Record<number, Blueprint>>({});
   async function initBlueprints() {
     const sbs = await getSdeBlueprints();
     blueprints.value = sbs.reduce(
@@ -240,7 +240,7 @@ export const useDataStore = defineStore("data", () => {
 
         const p = curr.activities.manufacturing.products[0];
         if (!p) return prev;
-        const rr: ManufactureBlueprint = {
+        const rr: Blueprint = {
           type: curr.blueprintTypeID,
           materials: curr.activities.manufacturing.materials?.map((m) => ({
             type: m.typeID,
@@ -253,7 +253,7 @@ export const useDataStore = defineStore("data", () => {
         prev[p.typeID] = rr;
         return prev;
       },
-      {} as Record<number, ManufactureBlueprint>,
+      {} as Record<number, Blueprint>,
     );
   }
   initBlueprints().catch((err) => {

@@ -1,4 +1,4 @@
-import type { ManufactureBlueprint } from "../../stores/data";
+import { type Blueprint } from "../../stores/data";
 
 export type ManufactureItemSource = "manufacture" | "purchase" | "original";
 
@@ -32,7 +32,7 @@ export function buildInitProduct(): ManufactureProductType {
 export function buildNewProduct(
   maketType: number[],
   quantity: number,
-  readBlueprint: (product: number) => ManufactureBlueprint | undefined,
+  readBlueprint: (product: number) => Blueprint | undefined,
   readPrice: (type: number) => number,
 ): ManufactureProductType {
   const type = maketType[maketType.length - 1];
@@ -95,7 +95,7 @@ export interface ManufactureItemType {
 export function buildNewItem(
   type: number,
   quantity: number,
-  readBlueprint: (product: number) => ManufactureBlueprint | undefined,
+  readBlueprint: (product: number) => Blueprint | undefined,
   readPrice: (type: number) => number,
 ): ManufactureItemType {
   const b = readBlueprint(type);
