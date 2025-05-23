@@ -47,8 +47,12 @@
   "manufacture.delete": "Delete",
   "manufacture.product.value": "Value",
   "manufacture.product.cost": "Cost",
+  "manufacture.product.route": "Route",
   "manufacture.product.materials": "Materials",
   "manufacture.item.value": "Value",
   "manufacture.item.cost": "Cost",
-  "manufacture.item.materials": "Materials"
+  "manufacture.item.materials": "Materials",
+  "manufacture.items.purchase": "Purchase",
+  "manufacture.items.manufacture": "Manufacture",
+  "manufacture.items.original": "Original"
 }

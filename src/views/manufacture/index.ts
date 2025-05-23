@@ -42,7 +42,7 @@ export function buildNewProduct(
   const b = readBlueprint(type);
   if (!b) throw new Error(`Blueprint for ${type} not found`);
 
-  const cycles = Math.ceil(quantity / b.quantity);
+  const cycles = quantity / b.quantity;
 
   return {
     type: type,
@@ -107,13 +107,13 @@ export function buildNewItem(
   const p = readPrice(type);
 
   if (b) {
-    const cycles = Math.ceil(quantity / b.quantity);
+    const cycles = quantity / b.quantity;
 
     return {
       recursion: recursion,
       type: type,
       quantity: quantity,
-      source: "manufacture",
+      source: "purchase",
 
       blueprintId: b.type,
       output: b.quantity,
@@ -132,13 +132,13 @@ export function buildNewItem(
       price: p,
     };
   } else if (ps) {
-    const cycles = Math.ceil(quantity / ps.quantity);
+    const cycles = quantity / ps.quantity;
 
     return {
       recursion: recursion,
       type: type,
       quantity: quantity,
-      source: "manufacture",
+      source: "purchase",
 
       isPlanetSchematic: true,
       output: ps.quantity,
@@ -176,4 +176,43 @@ export function calculateItemCost(item: ManufactureItemType): number {
   } else {
     return 0;
   }
+}
+
+export function aggregateManufactureItem(
+  product: ManufactureProductType,
+): Array<ManufactureItemType> {
+  const res: Record<number, ManufactureItemType> = {};
+
+  const ar = (item: ManufactureItemType) => {
+    if (!item.type) return;
+    else if (res[item.type]) {
+      res[item.type]!.recursion = Math.max(
+        res[item.type]!.recursion,
+        item.recursion,
+      );
+      res[item.type]!.quantity += item.quantity;
+    } else {
+      res[item.type] = {
+        ...item,
+        // unset materials, for saving memory
+        materials: undefined,
+      };
+    }
+  };
+  const ur = (item: ManufactureItemType) => {
+    ar(item);
+    if (item.source === "manufacture" && item.materials) {
+      item.materials.forEach(ur);
+    }
+  };
+
+  product.materials?.forEach(ur);
+
+  return Object.values(res).sort((a, b) => {
+    return (
+      a.recursion - b.recursion ||
+      b.quantity - a.quantity ||
+      (a.type ?? 0) - (b.type ?? 0)
+    );
+  });
 }

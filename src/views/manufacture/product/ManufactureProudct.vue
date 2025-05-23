@@ -26,24 +26,32 @@
       <el-divider direction="vertical" />
       <el-button :icon="Close" type="danger" @click="onDelete" />
     </el-space>
-    <div v-if="Boolean(localMaterials)" class="materials">
-      <ManufactureItem v-for="m of localMaterials" :key="m.data.type" :data="m.data" @change="m.onChange" />
-    </div>
+    <el-collapse class="detail">
+      <el-collapse-item :title="$t('manufacture.product.route')" name="route">
+        <el-tree :data="manufactureTree" />
+      </el-collapse-item>
+      <el-collapse-item :title="$t('manufacture.product.materials')" name="materials">
+        <ManufactureItems :data="materials" @source="onSource" />
+      </el-collapse-item>
+    </el-collapse>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { Close } from "@element-plus/icons-vue";
-import { ElButton, ElCascader, ElDivider, ElInputNumber, ElSpace } from "element-plus";
+import { ElButton, ElCascader, ElCollapse, ElCollapseItem, ElDivider, ElInputNumber, ElSpace, ElTree } from "element-plus";
 import "element-plus/es/components/cascader/style/css";
+import "element-plus/es/components/collapse-item/style/css";
+import "element-plus/es/components/collapse/style/css";
 import "element-plus/es/components/divider/style/css";
 import "element-plus/es/components/input-number/style/css";
 import "element-plus/es/components/space/style/css";
+import "element-plus/es/components/tree/style/css";
 import { computed, type PropType } from "vue";
-import { buildNewProduct, calculateProductCost, type ManufactureItemType, type ManufactureProductType } from "../";
+import { aggregateManufactureItem, buildNewProduct, calculateProductCost, type ManufactureItemSource, type ManufactureItemType, type ManufactureProductType } from "../";
 import { useDataStore } from "../../../stores/data";
-import { formatNumber } from "../../../utils/math";
-import ManufactureItem from "../item/ManufactureItem.vue";
+import { fixDecimals, formatNumber } from "../../../utils/math";
+import ManufactureItems from "../item/ManufactureItems.vue";
 
 const props = defineProps({
   data: {
@@ -90,22 +98,19 @@ const localQuantity = computed({
     }
   },
 });
-const localMaterials = computed(() => {
-  if (!props.data.materials) return undefined;
 
-  return props.data.materials.map((m, i) => {
+interface Tree {
+  label: string
+  children?: Tree[]
+}
+const manufactureTree = computed<Array<Tree>>(() => {
+  const bt: (item: ManufactureItemType) => Tree = (item: ManufactureItemType) => {
     return {
-      data: m,
-      onChange: (item: ManufactureItemType) => {
-        const nl = [...props.data.materials!];
-        nl[i] = item;
-        emits("change", {
-          ...props.data,
-          materials: nl,
-        });
-      }
+      label: `${dataStroe.types[item.type ?? 0] ?? "Unkown"} (${fixDecimals(item.quantity)})`,
+      children: item.materials?.map(bt),
     };
-  });
+  };
+  return props.data.materials?.map(bt) ?? [];
 });
 
 const value = computed(() => {
@@ -114,6 +119,26 @@ const value = computed(() => {
 const cost = computed(() => {
   return formatNumber(calculateProductCost(props.data));
 });
+
+const materials = computed(() => aggregateManufactureItem(props.data));
+
+function onSource(type: number, source: ManufactureItemSource) {
+  const ud: (data: ManufactureItemType, type: number, source: ManufactureItemSource) => ManufactureItemType = (data, type, source) => {
+    return {
+      ...data,
+      source: data.type === type ? source : data.source,
+      materials: data.materials?.map((m) => {
+        return ud(m, type, source);
+      })
+    };
+  };
+  emits("change", {
+    ...props.data,
+    materials: props.data.materials?.map((m) => {
+      return ud(m, type, source);
+    }),
+  });
+}
 
 function onDelete() {
   emits("delete");
@@ -137,7 +162,7 @@ function onDelete() {
     justify-content: space-between;
   }
 
-  .materials {
+  .detail {
     margin-top: 5px;
   }
 }

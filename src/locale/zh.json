@@ -46,8 +46,12 @@
   "manufacture.item.source.original": "采集",
   "manufacture.product.value": "价值",
   "manufacture.product.cost": "花费",
+  "manufacture.product.route": "制造路径",
   "manufacture.product.materials": "原料",
   "manufacture.item.value": "价值",
   "manufacture.item.cost": "花费",
-  "manufacture.item.materials": "原料"
+  "manufacture.item.materials": "原料",
+  "manufacture.items.purchase": "购买",
+  "manufacture.items.manufacture": "制造",
+  "manufacture.items.original": "采集"
 }
