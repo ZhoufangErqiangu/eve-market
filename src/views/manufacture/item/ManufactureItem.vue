@@ -26,7 +26,7 @@
         {{ $t("manufacture.item.materials") }}
       </div>
       <div class="list">
-        <ManufactureItem v-for="i of props.data.materials" :key="i.type" :data="i" />
+        <ManufactureItem v-for="m of localMaterials" :key="m.data.type" :data="m.data" @change="m.onChange" />
       </div>
     </div>
   </div>
@@ -97,6 +97,23 @@ const sourceOptions = computed(() => {
 const showMaterials = computed(() => {
   if (props.data.source !== "manufacture") return false;
   return Boolean(props.data.materials);
+});
+const localMaterials = computed(() => {
+  if (!props.data.materials) return undefined;
+
+  return props.data.materials.map((m, i) => {
+    return {
+      data: m,
+      onChange: (item: ManufactureItemType) => {
+        const nl = [...props.data.materials!];
+        nl[i] = item;
+        emits("change", {
+          ...props.data,
+          materials: nl,
+        });
+      },
+    };
+  });
 });
 
 const value = computed(() => {
