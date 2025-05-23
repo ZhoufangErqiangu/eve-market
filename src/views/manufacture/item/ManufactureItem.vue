@@ -79,18 +79,19 @@ const sourceOptions = computed(() => {
       { value: "purchase", label: t("manufacture.item.source.purchase") },
       { value: "original", label: t("manufacture.item.source.original") },
     ];
-  } else if (props.data.blueprintId) {
+  }
+
+  const canManufacture = props.data.blueprintId || props.data.isPlanetSchematic;
+  if (canManufacture) {
     return [
       { value: "manufacture", label: t("manufacture.item.source.manufacture") },
       { value: "purchase", label: t("manufacture.item.source.purchase") },
     ];
-  } else if (!props.data.blueprintId) {
+  } else {
     return [
       { value: "purchase", label: t("manufacture.item.source.purchase") },
       { value: "original", label: t("manufacture.item.source.original") },
     ];
-  } else {
-    return [];
   }
 });
 
