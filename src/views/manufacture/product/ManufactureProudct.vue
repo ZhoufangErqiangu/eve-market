@@ -41,7 +41,7 @@ import { ElButton, ElCascader, ElInputNumber } from "element-plus";
 import "element-plus/es/components/cascader/style/css";
 import "element-plus/es/components/input-number/style/css";
 import { computed, type PropType } from "vue";
-import { buildNewProduct, calculateCost, type ManufactureItemType, type ManufactureProductType } from "../";
+import { buildNewProduct, calculateProductCost, type ManufactureItemType, type ManufactureProductType } from "../";
 import { useDataStore } from "../../../stores/data";
 import { formatNumber } from "../../../utils/math";
 import ManufactureItem from "../item/ManufactureItem.vue";
@@ -113,7 +113,7 @@ const value = computed(() => {
   return formatNumber(props.data.quantity * props.data.price);
 });
 const cost = computed(() => {
-  return formatNumber(calculateCost(props.data));
+  return formatNumber(calculateProductCost(props.data));
 });
 
 function onDelete() {

@@ -66,6 +66,12 @@ export function buildNewProduct(
   };
 }
 
+export function calculateProductCost(product: ManufactureProductType): number {
+  return (
+    product.materials?.reduce((acc, m) => acc + calculateItemCost(m), 0) ?? 0
+  );
+}
+
 export interface ManufactureItemType {
   type?: number;
   quantity: number;
@@ -154,18 +160,12 @@ export function buildNewItem(
   }
 }
 
-export function calculateCost(
-  type: ManufactureProductType | ManufactureItemType,
-): number {
-  const cal: (i: ManufactureItemType) => number = (i: ManufactureItemType) => {
-    if (i.source === "purchase") {
-      return i.price * i.quantity;
-    } else if (i.source === "manufacture" && i.materials) {
-      return i.materials.reduce((acc, m) => acc + cal(m), 0);
-    } else {
-      return 0;
-    }
-  };
-
-  return type.materials?.reduce((acc, m) => acc + cal(m), 0) ?? 0;
+export function calculateItemCost(item: ManufactureItemType): number {
+  if (item.source === "purchase") {
+    return item.price * item.quantity;
+  } else if (item.source === "manufacture" && item.materials) {
+    return item.materials.reduce((acc, m) => acc + calculateItemCost(m), 0);
+  } else {
+    return 0;
+  }
 }

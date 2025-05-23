@@ -45,7 +45,7 @@ import { ElOption, ElSelect } from "element-plus";
 import "element-plus/es/components/select/style/css";
 import { computed, type PropType } from "vue";
 import { useI18n } from "vue-i18n";
-import { calculateCost, type ManufactureItemType } from "..";
+import { calculateItemCost, type ManufactureItemType } from "..";
 import { useDataStore } from "../../../stores/data";
 import { formatNumber } from "../../../utils/math";
 
@@ -129,7 +129,7 @@ const value = computed(() => {
   return formatNumber(props.data.quantity * props.data.price);
 });
 const cost = computed(() => {
-  return formatNumber(calculateCost(props.data));
+  return formatNumber(calculateItemCost(props.data));
 });
 </script>
 
