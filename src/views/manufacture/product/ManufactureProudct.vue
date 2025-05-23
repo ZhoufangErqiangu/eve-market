@@ -5,7 +5,8 @@
         <el-cascader v-model="localType" :options="dataStroe.blueprintOptions" :show-all-levels="false" />
         <el-button size="small" :icon="Close" type="danger" @click="onDelete" />
       </div>
-      <el-input-number v-model="localQuantity" :min="1" :step="1" />
+      <!-- there is a issue on quanity. will build a new product when change quantity, this causes all items be set to new. -->
+      <el-input-number v-model="localQuantity" :disabled="true" :min="1" :step="1" />
       <div class="isk">
         <div class="text1">
           {{ $t("manufacture.product.value") }}
@@ -40,10 +41,10 @@ import { ElButton, ElCascader, ElInputNumber } from "element-plus";
 import "element-plus/es/components/cascader/style/css";
 import "element-plus/es/components/input-number/style/css";
 import { computed, type PropType } from "vue";
-import { buildNewProduct, calculateProductCost, type ManufactureItemType, type ManufactureProductType } from "../";
+import { buildNewProduct, calculateCost, type ManufactureItemType, type ManufactureProductType } from "../";
 import { useDataStore } from "../../../stores/data";
-import ManufactureItem from "../item/ManufactureItem.vue";
 import { formatNumber } from "../../../utils/math";
+import ManufactureItem from "../item/ManufactureItem.vue";
 
 const props = defineProps({
   data: {
@@ -61,11 +62,13 @@ const localType = computed<number[] | undefined>({
     if (!value) {
       emits("change", { ...props.data, type: undefined, maketType: undefined });
     } else {
-      emits("change", buildNewProduct(value, props.data.quantity, (type: number) => {
-        return dataStroe.blueprints[type];
-      }, dataStroe.readPlanetSchematic, (type: number) => {
-        return dataStroe.marketPrices[type]?.avg ?? dataStroe.marketPrices[type]?.adj ?? 0;
-      }));
+      emits("change", buildNewProduct(
+        value,
+        props.data.quantity,
+        dataStroe.readBlueprint,
+        dataStroe.readPlanetSchematic,
+        dataStroe.readMarketPrice,
+      ));
     }
   },
 });
@@ -73,11 +76,13 @@ const localQuantity = computed({
   get: () => props.data.quantity,
   set: (value) => {
     if (props.data.marketType) {
-      emits("change", buildNewProduct(props.data.marketType, value, (type: number) => {
-        return dataStroe.blueprints[type];
-      }, dataStroe.readPlanetSchematic, (type: number) => {
-        return dataStroe.marketPrices[type]?.avg ?? dataStroe.marketPrices[type]?.adj ?? 0;
-      }));
+      emits("change", buildNewProduct(
+        props.data.marketType,
+        value,
+        dataStroe.readBlueprint,
+        dataStroe.readPlanetSchematic,
+        dataStroe.readMarketPrice,
+      ));
     } else {
       emits("change", {
         ...props.data,
@@ -108,7 +113,7 @@ const value = computed(() => {
   return formatNumber(props.data.quantity * props.data.price);
 });
 const cost = computed(() => {
-  return formatNumber(calculateProductCost(props.data));
+  return formatNumber(calculateCost(props.data));
 });
 
 function onDelete() {

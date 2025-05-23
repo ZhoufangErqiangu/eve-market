@@ -185,6 +185,11 @@ export const useDataStore = defineStore("data", () => {
   initMarketPrices().catch((err) => {
     console.error("Init market prices error", err);
   });
+  function readMarketPrice(type: number): number {
+    const mp = marketPrices.value[type];
+    if (!mp) return 0;
+    return mp.avg ?? mp.adj;
+  }
 
   // market orders
   async function readMarketOrders(
@@ -267,6 +272,9 @@ export const useDataStore = defineStore("data", () => {
   initBlueprints().catch((err) => {
     console.error("Init blueprints error", err);
   });
+  function readBlueprint(type: number): Blueprint | undefined {
+    return blueprints.value[type];
+  }
   const blueprintOptions = computed(() => {
     return buildBlueprintOptions(blueprints.value, marketGroups.value);
   });
@@ -319,10 +327,12 @@ export const useDataStore = defineStore("data", () => {
     marketGroups,
     readMarketGroup,
     marketPrices,
+    readMarketPrice,
     readMarketOrders,
     readMarketHistory,
     // blueprint
     blueprints,
+    readBlueprint,
     blueprintOptions,
     // planet
     planetSchematics,
