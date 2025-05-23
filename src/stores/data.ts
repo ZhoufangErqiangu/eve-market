@@ -244,24 +244,28 @@ export const useDataStore = defineStore("data", () => {
     const sbs = await getSdeBlueprints();
     blueprints.value = sbs.reduce(
       (prev, curr) => {
-        // skip null products
-        if (!curr.activities?.manufacturing?.products) return prev;
+        const ba = curr.activities.manufacturing ?? curr.activities.reaction;
 
-        if (curr.activities.manufacturing.products.length > 1) {
+        // skip null activitity
+        if (!ba) return prev;
+        // skip null product
+        else if (!ba.products) return prev;
+
+        if (ba.products.length > 1) {
           console.warn(`Blueprint ${curr.id} has multiple products`);
         }
 
-        const p = curr.activities.manufacturing.products[0];
+        const p = ba.products[0];
         if (!p) return prev;
         const rr: Blueprint = {
           type: curr.blueprintTypeID,
-          materials: curr.activities.manufacturing.materials?.map((m) => ({
+          materials: ba.materials?.map((m) => ({
             type: m.typeID,
             quantity: m.quantity,
           })),
           product: p.typeID,
           quantity: p.quantity,
-          time: curr.activities.manufacturing.time,
+          time: ba.time,
         };
         prev[p.typeID] = rr;
         return prev;

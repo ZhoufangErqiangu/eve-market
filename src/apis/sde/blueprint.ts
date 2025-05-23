@@ -1,12 +1,15 @@
+export interface SdeBlueprintActivity {
+  materials?: Array<{ quantity: number; typeID: number }>;
+  products?: Array<{ quantity: number; typeID: number }>;
+  time: number;
+}
+
 export interface SdeBlueprint {
   id: string;
   blueprintTypeID: number;
   activities: {
-    manufacturing: {
-      materials?: Array<{ quantity: number; typeID: number }>;
-      products?: Array<{ quantity: number; typeID: number }>;
-      time: number;
-    };
+    manufacturing?: SdeBlueprintActivity;
+    reaction?: SdeBlueprintActivity;
   };
 }
 
