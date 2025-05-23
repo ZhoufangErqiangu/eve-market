@@ -62,9 +62,13 @@ export function saveManufactureRecipe(recipe: ManufactureRecipe): void {
   localStorage.setItem(MANUFACTURE_LAST_RECIPE_KEY, key);
 
   // save recipes
-  const rs = JSON.parse(localStorage.getItem(MANUFACTURE_RECIPES_KEY) ?? "[]");
-  rs.push(recipe.name);
-  localStorage.setItem(MANUFACTURE_RECIPES_KEY, JSON.stringify(rs));
+  const rs: string[] = JSON.parse(
+    localStorage.getItem(MANUFACTURE_RECIPES_KEY) ?? "[]",
+  );
+  if (!rs.includes(recipe.name)) {
+    rs.push(recipe.name);
+    localStorage.setItem(MANUFACTURE_RECIPES_KEY, JSON.stringify(rs));
+  }
 }
 
 export function removeManufactureRecipe(key: string): void {
