@@ -28,10 +28,10 @@
     </el-space>
     <el-collapse class="detail">
       <el-collapse-item :title="$t('manufacture.product.route')" name="route">
-        <el-tree :data="manufactureTree" />
+        <ProductRoute :data="props.data.materials" @source="onSource" />
       </el-collapse-item>
       <el-collapse-item :title="$t('manufacture.product.materials')" name="materials">
-        <ManufactureItems :data="materials" @source="onSource" />
+        <ProductMaterials :data="materials" @source="onSource" />
       </el-collapse-item>
     </el-collapse>
   </div>
@@ -39,19 +39,19 @@
 
 <script lang="ts" setup>
 import { Close } from "@element-plus/icons-vue";
-import { ElButton, ElCascader, ElCollapse, ElCollapseItem, ElDivider, ElInputNumber, ElSpace, ElTree } from "element-plus";
+import { ElButton, ElCascader, ElCollapse, ElCollapseItem, ElDivider, ElInputNumber, ElSpace } from "element-plus";
 import "element-plus/es/components/cascader/style/css";
 import "element-plus/es/components/collapse-item/style/css";
 import "element-plus/es/components/collapse/style/css";
 import "element-plus/es/components/divider/style/css";
 import "element-plus/es/components/input-number/style/css";
 import "element-plus/es/components/space/style/css";
-import "element-plus/es/components/tree/style/css";
 import { computed, type PropType } from "vue";
 import { aggregateManufactureItem, buildNewProduct, calculateProductCost, type ManufactureItemSource, type ManufactureItemType, type ManufactureProductType } from "../";
 import { useDataStore } from "../../../stores/data";
-import { fixDecimals, formatNumber } from "../../../utils/math";
-import ManufactureItems from "../item/ManufactureItems.vue";
+import { formatNumber } from "../../../utils/math";
+import ProductMaterials from "./ManufactureProductMaterials.vue";
+import ProductRoute from "./ManufactureProductRoute.vue";
 
 const props = defineProps({
   data: {
@@ -97,20 +97,6 @@ const localQuantity = computed({
       });
     }
   },
-});
-
-interface Tree {
-  label: string
-  children?: Tree[]
-}
-const manufactureTree = computed<Array<Tree>>(() => {
-  const bt: (item: ManufactureItemType) => Tree = (item: ManufactureItemType) => {
-    return {
-      label: `${dataStroe.types[item.type ?? 0] ?? "Unkown"} (${fixDecimals(item.quantity)})`,
-      children: item.materials?.map(bt),
-    };
-  };
-  return props.data.materials?.map(bt) ?? [];
 });
 
 const value = computed(() => {

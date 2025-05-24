@@ -52,7 +52,6 @@
   "manufacture.item.value": "Value",
   "manufacture.item.cost": "Cost",
   "manufacture.item.materials": "Materials",
-  "manufacture.items.purchase": "Purchase",
-  "manufacture.items.manufacture": "Manufacture",
-  "manufacture.items.original": "Original"
+  "manufacture.product.materials.purchase": "Purchase",
+  "manufacture.product.materials.original": "Original"
 }

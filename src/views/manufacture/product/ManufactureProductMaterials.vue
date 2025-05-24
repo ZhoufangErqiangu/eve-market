@@ -1,8 +1,8 @@
 <template>
-  <div class="manufacture-items">
+  <div class="manufacture-product-materials">
     <div class="source">
       <div class="title">
-        {{ $t("manufacture.items.purchase") }}
+        {{ $t("manufacture.product.materials.purchase") }}
       </div>
       <div class="list">
         <ManufactureItem v-for="i of items.purchase" :key="i.type" :data="i" @source="onSource" />
@@ -10,15 +10,7 @@
     </div>
     <div class="source">
       <div class="title">
-        {{ $t("manufacture.items.manufacture") }}
-      </div>
-      <div class="list">
-        <ManufactureItem v-for="i of items.manufacture" :key="i.type" :data="i" @source="onSource" />
-      </div>
-    </div>
-    <div class="source">
-      <div class="title">
-        {{ $t("manufacture.items.original") }}
+        {{ $t("manufacture.product.materials.original") }}
       </div>
       <div class="list">
         <ManufactureItem v-for="i of items.original" :key="i.type" :data="i" @source="onSource" />
@@ -30,7 +22,7 @@
 <script lang="ts" setup>
 import { computed, type PropType } from "vue";
 import { type ManufactureItemSource, type ManufactureItemType } from "..";
-import ManufactureItem from "./ManufactureItem.vue";
+import ManufactureItem from "../item/ManufactureItem.vue";
 
 const props = defineProps({
   data: {
@@ -53,7 +45,8 @@ const items = computed(() => {
 
   for (const item of props.data) {
     if (item.source === "manufacture") {
-      res.manufacture.push(item);
+      // skip manufacture item
+      continue;
     } else if (item.source === "purchase") {
       res.purchase.push(item);
     } else if (item.source === "original") {
@@ -68,7 +61,7 @@ const items = computed(() => {
 </script>
 
 <style lang="less" scoped>
-.manufacture-items {
+.manufacture-product-materials {
   .source+.source {
     margin-top: 5px;
   }

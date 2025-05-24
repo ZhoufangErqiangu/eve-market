@@ -16,20 +16,17 @@
         {{ value }}
       </div>
     </div>
-    <el-select v-model="localSource" class="source">
-      <el-option v-for="o of sourceOptions" :key="o.value" :label="o.label" :value="o.value" />
-    </el-select>
+    <ItemSource class="source" :data="props.data" @source="onSource" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ElOption, ElSelect } from "element-plus";
-import "element-plus/es/components/select/style/css";
 import { computed, type PropType } from "vue";
 import { useI18n } from "vue-i18n";
 import { type ManufactureItemType } from "..";
 import { useDataStore } from "../../../stores/data";
 import { formatNumber } from "../../../utils/math";
+import ItemSource from "../ManufactureSource.vue";
 
 const props = defineProps({
   data: {
@@ -50,36 +47,9 @@ const quanity = computed(() => {
   return Math.ceil(props.data.quantity).toLocaleString("en-US");
 });
 
-const localSource = computed({
-  get: () => props.data.source,
-  set: (val) => {
-    // skip same value
-    if (val === props.data.source) return;
-    emits("source", props.data.type, val);
-  },
-});
-const sourceOptions = computed(() => {
-  if (!props.data.type) {
-    return [
-      { value: "manufacture", label: t("manufacture.item.source.manufacture") },
-      { value: "purchase", label: t("manufacture.item.source.purchase") },
-      { value: "original", label: t("manufacture.item.source.original") },
-    ];
-  }
-
-  const canManufacture = props.data.blueprintId || props.data.isPlanetSchematic;
-  if (canManufacture) {
-    return [
-      { value: "manufacture", label: t("manufacture.item.source.manufacture") },
-      { value: "purchase", label: t("manufacture.item.source.purchase") },
-    ];
-  } else {
-    return [
-      { value: "purchase", label: t("manufacture.item.source.purchase") },
-      { value: "original", label: t("manufacture.item.source.original") },
-    ];
-  }
-});
+function onSource(type: string, source: string) {
+  emits("source", type, source);
+}
 
 const value = computed(() => {
   return formatNumber(props.data.quantity * props.data.price);
@@ -92,9 +62,9 @@ const recusionClass = computed(() => {
 
 <style lang="less" scoped>
 .manufacture-item {
+  padding: 10px;
   box-sizing: border-box;
 
-  padding: 10px;
   border: solid 1px var(--border-color);
   border-radius: var(--el-border-radius-base);
   --border-color: var(var(--el-border-color));
