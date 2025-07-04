@@ -1,4 +1,6 @@
 {
+  "Name": "Name",
+
   "lang.en-US": "English",
   "lang.zh-CN": "简体中文",
   "lang.select.placeholder": "Select Language",
@@ -8,6 +10,7 @@
   "layout.header.menu.home": "Home",
   "layout.header.menu.market": "Market",
   "layout.header.menu.manufacture": "Manufacture",
+  "layout.header.menu.abstraction": "Abstraction",
   "layout.header.menu.config": "Config",
 
   "home.init.header": "Init",
@@ -53,5 +56,8 @@
   "manufacture.item.cost": "Cost",
   "manufacture.item.materials": "Materials",
   "manufacture.product.materials.purchase": "Purchase",
-  "manufacture.product.materials.original": "Original"
+  "manufacture.product.materials.original": "Original",
+
+  "abastraction.tab.sell": "For sell",
+  "abastraction.tab.buy": "For buy"
 }

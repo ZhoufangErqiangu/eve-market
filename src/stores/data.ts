@@ -10,6 +10,8 @@ import {
 } from "../apis/sde";
 import { getSdePlanetSchematics } from "../apis/sde/planet";
 
+const MATERIAL_TPYE_ID = 1031;
+
 export interface Region {
   id: number;
   name: string;
@@ -111,6 +113,35 @@ function buildBlueprintOptions(
       children: cc,
     });
   }
+  return res;
+}
+
+/**
+ * materials
+ */
+function buildMaterials(marketGroups: MarketGroup[]): Array<MarketType> {
+  const queue: MarketGroup[] = [...marketGroups];
+
+  const fmg = () => {
+    while (queue.length > 0) {
+      const mg = queue.shift();
+      if (!mg) continue;
+      else if (mg.id === MATERIAL_TPYE_ID) return mg;
+      queue.push(...mg.children);
+    }
+    return null;
+  };
+
+  const materialGroup = fmg();
+  if (!materialGroup) return [];
+
+  const res: Array<MarketType> = [];
+  const umt = (mg: MarketGroup) => {
+    res.push(...mg.types);
+    mg.children.forEach(umt);
+  };
+  umt(materialGroup);
+
   return res;
 }
 
@@ -322,7 +353,10 @@ export const useDataStore = defineStore("data", () => {
     return planetSchematics.value[type];
   }
 
-  // todo, Reactions
+  // materials
+  const materials = computed(() => {
+    return buildMaterials(marketGroups.value);
+  });
 
   return {
     // type
@@ -341,5 +375,7 @@ export const useDataStore = defineStore("data", () => {
     // planet
     planetSchematics,
     readPlanetSchematic,
+    // materials
+    materials,
   };
 });
