@@ -1,5 +1,8 @@
 {
   "Name": "Name",
+  "Ore price": "Ore price",
+  "Mineral price": "Mineral price",
+  "Ratio": "Ratio",
 
   "lang.en-US": "English",
   "lang.zh-CN": "简体中文",

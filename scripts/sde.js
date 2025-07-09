@@ -4,7 +4,10 @@ import { parse } from "yaml";
 
 function buildBluePrints() {
   // read yaml
-  const f = readFileSync(join(process.cwd(), "data/blueprints.yaml"), "utf8");
+  const f = readFileSync(
+    join(process.cwd(), "data/fsd/blueprints.yaml"),
+    "utf8",
+  );
   const data = parse(f);
 
   // build data
@@ -51,7 +54,10 @@ function buildBluePrints() {
 
 function buildMarketGroups() {
   // read yaml
-  const f = readFileSync(join(process.cwd(), "data/marketGroups.yaml"), "utf8");
+  const f = readFileSync(
+    join(process.cwd(), "data/fsd/marketGroups.yaml"),
+    "utf8",
+  );
   const data = parse(f);
 
   // build data
@@ -76,7 +82,7 @@ function buildMarketGroups() {
 
 function buildTypes() {
   // read yaml
-  const f = readFileSync(join(process.cwd(), "data/types.yaml"), "utf8");
+  const f = readFileSync(join(process.cwd(), "data/fsd/types.yaml"), "utf8");
   const data = parse(f);
 
   // build data
@@ -91,6 +97,7 @@ function buildTypes() {
       id: key,
       name: dd.name.zh,
       marketGroupID: dd.marketGroupID,
+      portionSize: dd.portionSize,
     };
   }
 
@@ -102,10 +109,41 @@ function buildTypes() {
   );
 }
 
+function buildTypeMaterials() {
+  const f = readFileSync(
+    join(process.cwd(), "data/fsd/typeMaterials.yaml"),
+    "utf8",
+  );
+  const data = parse(f);
+
+  // build data
+  const tts = {};
+  for (const key in data) {
+    const dd = data[key];
+
+    tts[key] = {
+      id: key,
+      materials: dd.materials.map((m) => {
+        return {
+          id: m.materialTypeID,
+          quantity: m.quantity,
+        };
+      }),
+    };
+  }
+
+  // save to json
+  writeFileSync(
+    join(process.cwd(), "public/json/sde-typematerials.json"),
+    JSON.stringify(tts, null, 2),
+    "utf8",
+  );
+}
+
 function buildPlanetSchematics() {
   // read yaml
   const f = readFileSync(
-    join(process.cwd(), "data/planetSchematics.yaml"),
+    join(process.cwd(), "data/fsd/planetSchematics.yaml"),
     "utf8",
   );
   const data = parse(f);
@@ -135,6 +173,7 @@ function main() {
     buildMarketGroups();
     console.log("market groups done");
     buildTypes();
+    buildTypeMaterials();
     console.log("types done");
     buildPlanetSchematics();
     console.log("planet schematics done");

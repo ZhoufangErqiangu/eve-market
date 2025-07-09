@@ -1,5 +1,8 @@
 {
   "Name": "名称",
+  "Ore price": "矿石价格",
+  "Mineral price": "矿物价格",
+  "Ratio": "比例",
 
   "lang.en-US": "English",
   "lang.zh-CN": "简体中文",

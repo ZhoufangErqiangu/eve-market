@@ -5,6 +5,7 @@ import { MarketApi } from "../apis/esi";
 import {
   getSdeBlueprints,
   getSdeMarketGroups,
+  getSdeTypeMaterials,
   getSdeTypes,
   type SdeMarketGroup,
 } from "../apis/sde";
@@ -15,6 +16,17 @@ const MATERIAL_TPYE_ID = 1031;
 export interface Region {
   id: number;
   name: string;
+}
+
+export interface TypePortion {
+  id: number;
+  quantity: number;
+  materials: TypeMaterial[];
+}
+
+export interface TypeMaterial {
+  id: number;
+  quantity: number;
 }
 
 export interface MarketType {
@@ -150,13 +162,15 @@ export const useDataStore = defineStore("data", () => {
 
   // type
   const types = ref<Record<string, string>>({});
+  const typePortions = ref<Record<string, TypePortion>>({});
 
   // market group
   const marketGroups = ref<Array<MarketGroup>>([]);
   async function initMarketGroups() {
     // init types
     const sts = await getSdeTypes();
-    types.value = sts.reduce(
+    const stsa = Object.values(sts);
+    types.value = stsa.reduce(
       (prev, curr) => {
         prev[curr.id] = curr.name ?? "Unknown";
         return prev;
@@ -164,16 +178,36 @@ export const useDataStore = defineStore("data", () => {
       {} as Record<string, string>,
     );
 
+    // init type materials
+    const stms = await getSdeTypeMaterials();
+    const stmsa = Object.values(stms);
+    typePortions.value = stmsa.reduce<Record<string, TypePortion>>(
+      (prev, curr) => {
+        const t = sts[curr.id];
+
+        prev[curr.id] = {
+          id: parseInt(curr.id),
+          quantity: t?.portionSize ?? 1,
+          materials: curr.materials,
+        };
+
+        return prev;
+      },
+      {},
+    );
+
     // init market groups
     const smgs = await getSdeMarketGroups();
-    const bmg: (sde: SdeMarketGroup) => MarketGroup = (sde: SdeMarketGroup) => {
-      const id = parseInt(sde.id);
+    const bmg: (sdemg: SdeMarketGroup) => MarketGroup = (
+      sdemg: SdeMarketGroup,
+    ) => {
+      const id = parseInt(sdemg.id);
       return {
         id: id,
-        name: sde.name,
+        name: sdemg.name,
         children: smgs.filter((g) => g.parentGroupID === id).map((g) => bmg(g)),
-        types: sde.hasTypes
-          ? sts
+        types: sdemg.hasTypes
+          ? stsa
               .filter((t) => t.marketGroupID === id)
               .map((t) => ({ id: parseInt(t.id), name: t.name ?? "Unknown" }))
           : [],
@@ -361,6 +395,7 @@ export const useDataStore = defineStore("data", () => {
   return {
     // type
     types,
+    typePortions,
     // market
     marketGroups,
     readMarketGroup,
