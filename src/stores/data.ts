@@ -256,30 +256,50 @@ export const useDataStore = defineStore("data", () => {
     return mp.avg ?? mp.adj;
   }
 
+  const orderCache: Map<string, Array<MarketOrder>> = new Map();
+  function buildOrderCacheKey(
+    region: number,
+    type: number,
+    direction: "buy" | "sell" | "all",
+  ) {
+    return `${region}-${type}-${direction}`;
+  }
+
   // market orders
   async function readMarketOrders(
     region: number,
     type: number,
     direction: "buy" | "sell" | "all" = "all",
   ): Promise<Array<MarketOrder>> {
-    const os = await m.getMarketsRegionIdOrders({
-      regionId: region,
-      typeId: type,
-      orderType: direction,
-    });
-    return os.map((o) => {
-      return {
-        id: o.orderId,
-        type: o.typeId,
-        isBuy: o.isBuyOrder,
-        price: o.price,
-        minQuantity: o.minVolume,
-        totalQuantity: o.volumeTotal,
-        remainQuantity: o.volumeRemain,
-        createdAt: new Date(o.issued),
-        duration: o.duration,
-      };
-    });
+    const k = buildOrderCacheKey(region, type, direction);
+    if (orderCache.has(k)) {
+      return orderCache.get(k)!;
+    } else {
+      const os = await m.getMarketsRegionIdOrders({
+        regionId: region,
+        typeId: type,
+        orderType: direction,
+      });
+
+      // build data
+      const r = os.map((o) => {
+        return {
+          id: o.orderId,
+          type: o.typeId,
+          isBuy: o.isBuyOrder,
+          price: o.price,
+          minQuantity: o.minVolume,
+          totalQuantity: o.volumeTotal,
+          remainQuantity: o.volumeRemain,
+          createdAt: new Date(o.issued),
+          duration: o.duration,
+        };
+      });
+
+      // set to cache
+      orderCache.set(k, r);
+      return r;
+    }
   }
 
   // market history
