@@ -51,7 +51,7 @@ async function initData() {
         return priceCache.get(id);
       } else {
         // read ore orders
-        const oos = await dataStore.readMarketOrders(props.region, id, "buy");
+        const oos = await dataStore.readMarketOrders(props.region, id, "sell");
         const o = oos.reduce<number>((prev, curr) => {
           if (!prev) return curr.price;
           else if (curr.price > prev) return curr.price;
@@ -107,7 +107,7 @@ const dd = computed(() => {
     return {
       ...d,
       priceMineral: mp,
-      ratio: d.priceOre > 0 ? mp / d.priceOre : 0.0,
+      ratio: mp > 0 ? d.priceOre / mp : 0.0,
     };
   });
 });
